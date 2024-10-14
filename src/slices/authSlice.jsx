@@ -1,50 +1,49 @@
 // src/slices/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import apiClient from '../utils/apiClient';
 
-// Mock login credentials (replace with real backend later)
-const mockUser = {
-  email: 'cse4himanshu@gmail.com',
-  password: 'Himanshu@123',
-  name: 'Test User',
-};
+// Create an Axios instance with a base URL
+// Async thunk for login
 
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
-  // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  try {
+    // Make an API call to your login endpoint using the Axios instance
+    const response = await apiClient.post('/user/login', {
+      email: credentials.email,
+      password: credentials.password,
+    });
+    const userData = response.data;
 
-  // Check hardcoded credentials
-  if (credentials.email === mockUser.email && credentials.password === mockUser.password) {
-    // Store user credentials in localStorage
-    localStorage.setItem('user', JSON.stringify({
-      email: mockUser.email,
-      name: mockUser.name,
-    }));
+    // Return the user data as the fulfilled action payload
 
     return {
-      email: mockUser.email,
-      name: mockUser.name,
+      email: userData.email,
+      name: userData.name,
     };
-  } else {
-    return thunkAPI.rejectWithValue('Invalid email or password');
+
+  } catch (error) {
+    console.error("API call failed: ", error); // Log the full error
+
+    // Log detailed error response if available
+    if (error.response) {
+      console.log("Error response data: ", error.response.data);
+      console.log("Error status: ", error.response.status);
+      console.log("Error headers: ", error.response.headers);
+      return thunkAPI.rejectWithValue(error.response.data.message || 'Login failed');
+    } else {
+      return thunkAPI.rejectWithValue('Something went wrong. Please try again.');
+    }
   }
 });
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: JSON.parse(localStorage.getItem('user')) || null,
-    isAuthenticated: !!localStorage.getItem('user'),
+    user: null,  // Initially, no user is stored
+    isAuthenticated: false,  // User is not authenticated by default
     isLoading: false,
     error: null,
   },
-    // Clear localStorage and reset state
-  // reducers: {
-  //   logout(state) {
-  //     localStorage.removeItem('user');
-  //     state.user = null;
-  //     state.isAuthenticated = false;
-  //   }
-  // },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -64,6 +63,7 @@ const authSlice = createSlice({
   },
 });
 
+// You can uncomment the logout action and modify it to clear state when needed
 // export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
