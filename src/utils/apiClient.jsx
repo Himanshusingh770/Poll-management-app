@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Create an Axios instance with a base URL
 const apiClient = axios.create({
-  baseURL: "http://192.168.68.100:3000", // Your base URL here
+  baseURL: "https://e859-125-63-121-121.ngrok-free.app/", // Your base URL here
 });
 
 // Optional: You can add interceptors for request/response logging or error handling
