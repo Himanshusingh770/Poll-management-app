@@ -4,8 +4,8 @@ import { login } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Card, Spinner } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
-import { validateField, validateForm } from '../utils/validationUtils'; // Ensure this utility function is set up correctly
-import ToastMessage from './ToastMessage';
+import { validateField, validateForm } from '../utils/validationUtils';
+import ToastMessage from '../Components/TostMassege';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -22,10 +22,10 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const {errors, isFormValid } = validateForm(formData)
-    setFormErrors(errors)
+    const { errors, isFormValid } = validateForm(formData);
+    setFormErrors(errors);
     if (!isFormValid) {
-      return
+      return;
     }
     dispatch(
       login({
@@ -37,6 +37,7 @@ const Login = () => {
       .then(() => navigate('/polls'))
       .catch(() => setShowErrorToast(true));
   };
+
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -72,7 +73,10 @@ const Login = () => {
               onChange={handleValueChange}
               isInvalid={!!formError.email} // Check for email error
             />
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback
+              type="invalid"
+              style={{ textTransform: 'capitalize' }} // Apply text-transform here
+            >
               {formError.email} {/* Display email error */}
             </Form.Control.Feedback>
           </Form.Group>
@@ -100,9 +104,13 @@ const Login = () => {
               </span>
             </div>
             {formError.password && (
-              <div className="text-danger mt-1">{formError.password}</div>
-            )}{' '}
-            {/* Display password error */}
+              <div
+                className="text-danger mt-1"
+                style={{ textTransform: 'capitalize' }} // Apply text-transform here
+              >
+                {formError.password}
+              </div>
+            )}
           </Form.Group>
 
           <Button

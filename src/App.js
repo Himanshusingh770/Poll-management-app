@@ -3,7 +3,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom'; // Import Route for defining routes
 import Login from './Pages/LoginForm';
 import PollList from './Pages/PollList';
-import ProtectedRoute from './Pages/Routes/ProtectedRoutes' // Import the ProtectedRoute component
+import ProtectedRoute from './Routes//ProtectedRoutes' // Import the ProtectedRoute component
 
 const App = () => {
   return (
