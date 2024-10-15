@@ -6,6 +6,7 @@ import { Form, Button, Container, Card, Spinner } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { validateField, validateForm } from '../utils/validationUtils';
 import ToastMessage from '../Components/TostMassege';
+import "../App.css"
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -51,15 +52,8 @@ const Login = () => {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   return (
-    <Container className="d-flex justify-content-center align-items-center vh-100">
-      <Card
-        style={{
-          width: '30rem',
-          borderRadius: '10px',
-          backgroundColor: '#f8f9fa'
-        }}
-        className="shadow-lg p-4"
-      >
+    <Container className="login-container">
+      <Card className="login-card">
         <h2 className="text-center mb-4">Login</h2>
 
         <Form noValidate onSubmit={handleSubmit}>
@@ -71,13 +65,10 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleValueChange}
-              isInvalid={!!formError.email} // Check for email error
+              isInvalid={!!formError.email}
             />
-            <Form.Control.Feedback
-              type="invalid"
-              style={{ textTransform: 'capitalize' }} // Apply text-transform here
-            >
-              {formError.email} {/* Display email error */}
+            <Form.Control.Feedback type="invalid" className="text-error">
+              {formError.email}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -91,23 +82,17 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleValueChange}
-                isInvalid={!!formError.password} // Check for password error
+                isInvalid={!!formError.password}
               />
               <span
-                className={`position-absolute end-0 top-50 translate-middle-y d-flex justify-content-center align-items-center ${
-                  formError.password ? 'mx-5' : 'mx-3'
-                }`}
-                style={{ cursor: 'pointer' }}
+                className={`password-toggle-icon ${formError.password ? 'mx-5' : 'mx-3'}`}
                 onClick={togglePasswordVisibility}
               >
                 {showPassword ? <EyeFill /> : <EyeSlashFill />}
               </span>
             </div>
             {formError.password && (
-              <div
-                className="text-danger mt-1"
-                style={{ textTransform: 'capitalize' }} // Apply text-transform here
-              >
+              <div className="text-danger mt-1 text-error">
                 {formError.password}
               </div>
             )}
@@ -116,7 +101,7 @@ const Login = () => {
           <Button
             variant={isLoading ? 'secondary' : 'primary'}
             type="submit"
-            className="mt-3 w-100 d-flex justify-content-center align-items-center"
+            className="login-button"
             disabled={isLoading}
           >
             {isLoading ? <Spinner animation="border" size="md" /> : 'Login'}

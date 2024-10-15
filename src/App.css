@@ -1,0 +1,56 @@
+/* App.css */
+.toast-container {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 40px;
+  }
+  /* App.css */
+
+/* Container and Card Styling */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .login-card {
+    width: 30rem;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  /* Error Text Capitalization */
+  .text-error {
+    text-transform: capitalize;
+  }
+  
+  /* Button alignment */
+  .login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  
+  /* Password visibility toggle */
+  .password-toggle-icon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
+  .password-toggle-icon.mx-5 {
+    margin-right: 5rem;
+  }
+  
+  .password-toggle-icon.mx-3 {
+    margin-right: 3rem;
+  }
+  
