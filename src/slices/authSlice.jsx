@@ -14,7 +14,6 @@ export const login = createAsyncThunk(
       const userData = response.data;
 
       // Return the user data as the fulfilled action payload
-
       return {
         email: userData.email,
         name: userData.name

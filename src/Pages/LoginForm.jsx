@@ -1,69 +1,50 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../../slices/authSlice';
+import { login } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Card, Spinner } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
-import { isValidEmail } from '../../../utils/validationUtils';
-import ToastMessage from '../Components/ToastMessage';
+import { validateField, validateForm } from '../utils/validationUtils'; // Ensure this utility function is set up correctly
+import ToastMessage from './ToastMessage';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [formFieldTouched, setFormFieldTouched] = useState({
-    email: false,
-    password: false
-  });
   const [showPassword, setShowPassword] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
+  const [formError, setFormErrors] = useState({
+    email: '',
+    password: ''
+  });
 
   const { isLoading, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Validate email using the utility function
-  const validateEmail = () => {
-    if (!formFieldTouched.email) return '';
-    if (!formData.email) return 'Email is required';
-    if (!isValidEmail(formData.email))
-      return 'Please enter a valid email address';
-    return '';
-  };
-
-  // Validate password
-  const validatePassword = () => {
-    if (!formFieldTouched.password) return '';
-    if (!formData.password) return 'Password is required';
-    return '';
-  };
-
-  const emailError = validateEmail();
-  const passwordError = validatePassword();
-
-  const isFormValid =
-    !emailError && !passwordError && formFieldTouched.password;
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormFieldTouched({ ...formFieldTouched, password: true, email: true });
-
-    if (isFormValid) {
-      dispatch(
-        login({
-          email: formData.email.trim(),
-          password: formData.password.trim()
-        })
-      )
-        .unwrap()
-        .then(() => navigate('/polls'))
-        .catch(() => setShowErrorToast(true));
+    const {errors, isFormValid } = validateForm(formData)
+    setFormErrors(errors)
+    if (!isFormValid) {
+      return
     }
+    dispatch(
+      login({
+        email: formData.email.trim(),
+        password: formData.password.trim()
+      })
+    )
+      .unwrap()
+      .then(() => navigate('/polls'))
+      .catch(() => setShowErrorToast(true));
   };
-  // Single handlePasswordEmailChange function for both email and password
-  const handlePasswordEmailChange = (e) => {
+  const handleValueChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    setFormFieldTouched((prevTouched) => ({ ...prevTouched, [name]: true }));
-    setShowErrorToast(false);
+    const error = validateField(value, name);
+    setFormErrors({
+      ...formError,
+      [name]: error
+    });
   };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -88,11 +69,11 @@ const Login = () => {
               placeholder="Enter email"
               name="email"
               value={formData.email}
-              onChange={handlePasswordEmailChange}
-              isInvalid={!!emailError}
+              onChange={handleValueChange}
+              isInvalid={!!formError.email} // Check for email error
             />
             <Form.Control.Feedback type="invalid">
-              {emailError}
+              {formError.email} {/* Display email error */}
             </Form.Control.Feedback>
           </Form.Group>
 
@@ -105,19 +86,12 @@ const Login = () => {
                 placeholder="Password"
                 name="password"
                 value={formData.password}
-                onChange={handlePasswordEmailChange}
-                onBlur={() =>
-                  setFormFieldTouched((prevTouched) => ({
-                    ...prevTouched,
-                    password: true
-                  }))
-                }
-                isInvalid={!!passwordError}
-                // style={{ paddingRight: '2.5rem' }}
+                onChange={handleValueChange}
+                isInvalid={!!formError.password} // Check for password error
               />
               <span
                 className={`position-absolute end-0 top-50 translate-middle-y d-flex justify-content-center align-items-center ${
-                  passwordError ? 'mx-5' : 'mx-3'
+                  formError.password ? 'mx-5' : 'mx-3'
                 }`}
                 style={{ cursor: 'pointer' }}
                 onClick={togglePasswordVisibility}
@@ -125,9 +99,10 @@ const Login = () => {
                 {showPassword ? <EyeFill /> : <EyeSlashFill />}
               </span>
             </div>
-            {passwordError && (
-              <div className="text-danger mt-1">{passwordError}</div>
-            )}
+            {formError.password && (
+              <div className="text-danger mt-1">{formError.password}</div>
+            )}{' '}
+            {/* Display password error */}
           </Form.Group>
 
           <Button

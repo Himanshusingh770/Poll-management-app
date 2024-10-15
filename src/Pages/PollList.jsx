@@ -1,4 +1,3 @@
-// src/components/PollList.js
 import React from 'react';
 import { Container } from 'react-bootstrap';
 
