@@ -1,11 +1,12 @@
-/* App.css */
+/* Tost Css */
 .toast-container {
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
     margin-bottom: 40px;
   }
-  /* App.css */
+ 
+  /* Login Page Css */
 
 /* Container and Card Styling */
 .login-container {
