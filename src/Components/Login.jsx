@@ -3,21 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Card, Spinner, ToastContainer, Toast } from 'react-bootstrap';
-import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons'; // Eye icons
+import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-  const [showErrorToast, setShowErrorToast] = useState(false); // State to control toast visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
 
   const { isLoading, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email validation check
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const validateEmail = () => {
     if (!emailTouched) return '';
@@ -35,7 +35,6 @@ const Login = () => {
   const emailError = validateEmail();
   const passwordError = validatePassword();
 
-  // Check if the form is valid (i.e., no errors and fields are not empty)
   const isFormValid = !emailError && !passwordError && emailTouched && passwordTouched;
 
   const handleSubmit = (e) => {
@@ -46,30 +45,24 @@ const Login = () => {
     if (isFormValid) {
       dispatch(login({ email: email.trim(), password: password.trim() }))
         .unwrap()
-        .then(() => {
-          navigate('/polls');
-        })
-        .catch(() => {
-          setShowErrorToast(true); // Show error toast if login fails
-        });
+        .then(() => navigate('/polls'))
+        .catch(() => setShowErrorToast(true));
     }
   };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    if (!emailTouched) setEmailTouched(true); // Mark email as touched when the user types
-    setShowErrorToast(false); // Clear error when typing
+    if (!emailTouched) setEmailTouched(true);
+    setShowErrorToast(false);
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    if (!passwordTouched) setPasswordTouched(true); // Mark password as touched when the user types
-    setShowErrorToast(false); // Clear error when typing
+    if (!passwordTouched) setPasswordTouched(true);
+    setShowErrorToast(false);
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Toggle between show and hide
-  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   return (
     <Container className="d-flex justify-content-center align-items-center vh-100">
@@ -84,73 +77,68 @@ const Login = () => {
               placeholder="Enter email"
               value={email}
               onChange={handleEmailChange}
-              onBlur={() => setEmailTouched(true)} // Mark email as touched when focus leaves
+              onBlur={() => setEmailTouched(true)}
               isInvalid={!!emailError}
             />
             <Form.Control.Feedback type="invalid">{emailError}</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="formPassword" className="mb-3">
-  <Form.Label>Password</Form.Label>
-  <div className="position-relative">
-    <Form.Control
-      type={showPassword ? 'text' : 'password'} // Toggle between text and password
-      placeholder="Password"
-      value={password}
-      onChange={handlePasswordChange}
-      onBlur={() => setPasswordTouched(true)} // Mark password as touched when focus leaves
-      isInvalid={!!passwordError}
-      style={{ paddingRight: '2.5rem' }} // Add enough padding for the eye icon
-    />
-    {/* Eye icon for toggling password visibility */}
-    <span
-      className={`position-absolute end-0 top-50 translate-middle-y d-flex justify-content-center align-items-center ${ passwordError ? 'mx-5' : 'mx-3'}`} // Centered vertically, margin-right adjusted
-      style={{ cursor: 'pointer' }} // Make the icon clickable
-      onClick={togglePasswordVisibility}
-    >
-      {showPassword ? <EyeFill className='p-5' /> : <EyeSlashFill />}
-    </span>
-  </div>
-  
-  {/* Separate div for the password error */}
-  {passwordError && <div className="text-danger mt-1">{passwordError}</div>}
-</Form.Group>
+            <Form.Label>Password</Form.Label>
+            <div className="position-relative">
+              <Form.Control
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+                onBlur={() => setPasswordTouched(true)}
+                isInvalid={!!passwordError}
+                style={{ paddingRight: '2.5rem' }}
+              />
+              <span
+                className={`position-absolute end-0 top-50 translate-middle-y d-flex justify-content-center align-items-center ${passwordError ? 'mx-5' : 'mx-3'}`}
+                style={{ cursor: 'pointer' }}
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <EyeFill /> : <EyeSlashFill />}
+              </span>
+            </div>
+            {passwordError && <div className="text-danger mt-1">{passwordError}</div>}
+          </Form.Group>
 
-
-          <Button 
-            variant={isLoading ? 'secondary' : 'primary'} // Change color when loading
-            type="submit" 
-            className="mt-3 w-100 d-flex justify-content-center align-items-center" 
-            disabled={isLoading} // Disable button during loading
+          <Button
+            variant={isLoading ? 'secondary' : 'primary'}
+            type="submit"
+            className="mt-3 w-100 d-flex justify-content-center align-items-center"
+            disabled={isLoading}
           >
-            {isLoading ? <Spinner animation="border" size="md" /> : 'Login'} {/* Show loader */}
+            {isLoading ? <Spinner animation="border" size="md" /> : 'Login'}
           </Button>
         </Form>
       </Card>
 
-      {/* Toast to display login error, placed outside the card */}
-      <ToastContainer 
-  position="bottom-center" 
-  style={{ 
-    position: 'fixed', 
-    left: '50%', 
-    transform: 'translateX(-50%)',  /* Ensure it's centered */
-    marginBottom: '40px',           /* Add bottom margin */
-    marginRight: '20px'             /* Add right margin */
-  }}
->
-  <Toast 
-    show={showErrorToast} 
-    onClose={() => setShowErrorToast(false)} 
-    delay={3000} 
-    autohide 
-    bg="danger"
-  >
-    <Toast.Body className="text-light">{error}</Toast.Body>
-  </Toast>
-</ToastContainer>
-
-
+      <ToastContainer
+        position="bottom-center"
+        style={{
+          position: 'fixed',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          marginBottom: '40px',
+        }}
+      >
+        <Toast
+          show={showErrorToast}
+          onClose={() => setShowErrorToast(false)}
+          delay={6000}
+          autohide
+          bg="danger"
+        >
+          <Toast.Header closeButton>
+            <strong className="me-auto">Error</strong>
+          </Toast.Header>
+          <Toast.Body className="text-light">{error}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </Container>
   );
 };
