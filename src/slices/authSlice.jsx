@@ -1,8 +1,6 @@
 // src/slices/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../utils/apiClient';
-
-// Create an Axios instance with a base URL
 // Async thunk for login
 
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
@@ -62,8 +60,4 @@ const authSlice = createSlice({
       });
   },
 });
-
-// You can uncomment the logout action and modify it to clear state when needed
-// export const { logout } = authSlice.actions;
-
 export default authSlice.reducer;

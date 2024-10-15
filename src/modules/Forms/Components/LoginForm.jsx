@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../slices/authSlice';
+import { login } from '../../../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Container, Card, Spinner, ToastContainer, Toast } from 'react-bootstrap';
+import { Form, Button, Container, Card, Spinner, } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
+import { isValidEmail } from '../../../utils/validationUtils';
+import ToastMessage from '../Components/ToastMessage';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [emailTouched, setEmailTouched] = useState(false);
-  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formFieldTouched, setFormFieldTouched] = useState({ email: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
 
@@ -17,55 +17,49 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+  // Validate email using the utility function
   const validateEmail = () => {
-    if (!emailTouched) return '';
-    if (!email) return 'Email is required';
-    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    if (!formFieldTouched.email) return '';
+    if (!formData.email) return 'Email is required';
+    if (!isValidEmail(formData.email)) return 'Please enter a valid email address';
     return '';
   };
 
+  // Validate password
   const validatePassword = () => {
-    if (!passwordTouched) return '';
-    if (!password) return 'Password is required';
+    if (!formFieldTouched.password) return '';
+    if (!formData.password) return 'Password is required';
     return '';
   };
 
   const emailError = validateEmail();
   const passwordError = validatePassword();
 
-  const isFormValid = !emailError && !passwordError && emailTouched && passwordTouched;
+  const isFormValid = !emailError && !passwordError && formFieldTouched.password;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEmailTouched(true);
-    setPasswordTouched(true);
+    setFormFieldTouched({ ...formFieldTouched, password: true, email:true });
 
     if (isFormValid) {
-      dispatch(login({ email: email.trim(), password: password.trim() }))
+      dispatch(login({ email: formData.email.trim(), password: formData.password.trim() }))
         .unwrap()
         .then(() => navigate('/polls'))
         .catch(() => setShowErrorToast(true));
     }
   };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    if (!emailTouched) setEmailTouched(true);
-    setShowErrorToast(false);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    if (!passwordTouched) setPasswordTouched(true);
+  // Single handlePasswordEmailChange function for both email and password
+  const handlePasswordEmailChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormFieldTouched((prevTouched) => ({ ...prevTouched, [name]: true }));
     setShowErrorToast(false);
   };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   return (
-    <Container className="d-flex justify-content-center align-items-center vh-100">
+    <Container className="d-flex justify-content-center align-items-center vh-100 bg-primary">
       <Card style={{ width: '30rem', borderRadius: '10px', backgroundColor: '#f8f9fa' }} className="shadow-lg p-4">
         <h2 className="text-center mb-4">Login</h2>
 
@@ -75,9 +69,9 @@ const Login = () => {
             <Form.Control
               type="email"
               placeholder="Enter email"
-              value={email}
-              onChange={handleEmailChange}
-              onBlur={() => setEmailTouched(true)}
+              name="email"
+              value={formData.email}
+              onChange={handlePasswordEmailChange}
               isInvalid={!!emailError}
             />
             <Form.Control.Feedback type="invalid">{emailError}</Form.Control.Feedback>
@@ -86,14 +80,15 @@ const Login = () => {
           <Form.Group controlId="formPassword" className="mb-3">
             <Form.Label>Password</Form.Label>
             <div className="position-relative">
-              <Form.Control
+              <Form.Control className='pe-3'
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
-                value={password}
-                onChange={handlePasswordChange}
-                onBlur={() => setPasswordTouched(true)}
+                name="password"
+                value={formData.password}
+                onChange={handlePasswordEmailChange}
+                onBlur={() => setFormFieldTouched((prevTouched) => ({ ...prevTouched, password: true }))}
                 isInvalid={!!passwordError}
-                style={{ paddingRight: '2.5rem' }}
+                // style={{ paddingRight: '2.5rem' }}
               />
               <span
                 className={`position-absolute end-0 top-50 translate-middle-y d-flex justify-content-center align-items-center ${passwordError ? 'mx-5' : 'mx-3'}`}
@@ -117,28 +112,12 @@ const Login = () => {
         </Form>
       </Card>
 
-      <ToastContainer
-        position="bottom-center"
-        style={{
-          position: 'fixed',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          marginBottom: '40px',
-        }}
-      >
-        <Toast
-          show={showErrorToast}
-          onClose={() => setShowErrorToast(false)}
-          delay={6000}
-          autohide
-          bg="danger"
-        >
-          <Toast.Header closeButton>
-            <strong className="me-auto">Error</strong>
-          </Toast.Header>
-          <Toast.Body className="text-light">{error}</Toast.Body>
-        </Toast>
-      </ToastContainer>
+      <ToastMessage
+        show={showErrorToast}
+        onClose={() => setShowErrorToast(false)}
+        message={error || "An error occurred"}
+        variant="danger"
+      />
     </Container>
   );
 };
