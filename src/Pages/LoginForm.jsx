@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../slices/authSlice';
@@ -6,7 +7,8 @@ import { Form, Button, Container, Card, Spinner } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { validateField, validateForm } from '../utils/validationUtils';
 import ToastMessage from '../Components/TostMassege';
-import "../App.css"
+import { Link } from 'react-router-dom';
+import "../App.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -23,7 +25,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { errors, isFormValid } = validateForm(formData);
+    const { errors, isFormValid } = validateForm(formData, false);
     setFormErrors(errors);
     if (!isFormValid) {
       return;
@@ -42,7 +44,7 @@ const Login = () => {
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
-    const error = validateField(value, name);
+    const error = validateField(value, name, formData); 
     setFormErrors({
       ...formError,
       [name]: error
@@ -107,6 +109,12 @@ const Login = () => {
             {isLoading ? <Spinner animation="border" size="md" /> : 'Login'}
           </Button>
         </Form>
+        <div className="text-center mt-3">
+          <span>Not a Member? </span>
+          <Link to="/signup" className="text-primary">
+            Sign Up Now
+          </Link>
+        </div>
       </Card>
 
       <ToastMessage
