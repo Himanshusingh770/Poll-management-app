@@ -1,12 +1,11 @@
 /* App.css */
 .toast-container {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: 40px;
-  }
-  /* App.css */
-
+  position: absolute;
+  left: 50%;
+  top: 2%; /* Adjust to your liking */
+  transform: translateX(-50%);
+  z-index: 1050; /* Ensure it appears above other content */
+}
 /* Container and Card Styling */
 .login-container {
     display: flex;
@@ -53,4 +52,54 @@
   .password-toggle-icon.mx-3 {
     margin-right: 3rem;
   }
-  
+/* signup page CSS */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  font-family: 'Poppins', sans-serif; /* Adding a common font */
+}
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height of the viewport */
+}
+
+.signup-card {
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+  max-width: 500px; /* Decreased width */
+  width: 100%;
+  padding: 5px; /* Add padding for better spacing */
+}
+.signup-card h2 {
+  color: #333;
+}
+
+.signup-card input,
+.signup-card select {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease; /* Transition for input fields */
+}
+
+.signup-card input:focus,
+.signup-card select:focus {
+  border-color: #ff7a7a; /* Highlight on focus */
+  outline: none; /* Remove default outline */
+}
+
+.signup-card .btn {
+  border-radius: 8px;
+  font-weight: bold;
+  background-color: #ff7a7a;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.2s; /* Smooth transition */
+}
+.signup-card .btn:hover {
+  background-color: #ff5252;
+  transform: translateY(-2px); /* Slightly lift button on hover */
+}

@@ -1,39 +1,38 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../utils/apiClient';
 // Async thunk for login
-
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials, thunkAPI) => {
     try {
-      // Make an API call to your login endpoint using the Axios instance
       const response = await apiClient.post('/user/login', {
         email: credentials.email,
         password: credentials.password
       });
       const userData = response.data;
-
-      // Return the user data as the fulfilled action payload
-      return {
-        email: userData.email,
-        name: userData.name
-      };
+      return { email: userData.email, name: userData.name };
     } catch (error) {
-      console.error('API call failed: ', error); // Log the full error
-
-      // Log detailed error response if available
       if (error.response) {
-        console.log('Error response data: ', error.response.data);
-        console.log('Error status: ', error.response.status);
-        console.log('Error headers: ', error.response.headers);
-        return thunkAPI.rejectWithValue(
-          error.response.data.message || 'Login failed'
-        );
-      } else {
-        return thunkAPI.rejectWithValue(
-          'Something went wrong. Please try again.'
-        );
+        return thunkAPI.rejectWithValue(error.response.data.message || 'Login failed');
       }
+      return thunkAPI.rejectWithValue('Something went wrong. Please try again.');
+    }
+  }
+);
+// Async thunk for signup
+export const signup = createAsyncThunk(
+  'auth/signup',
+  async (userDetails, thunkAPI) => {
+    try {
+      console.log('Sending user details:', userDetails); // Log user details
+      const response = await apiClient.post('/user/register', userDetails);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        console.error('Error response:', error.response); // Log the full error response
+        return thunkAPI.rejectWithValue(error.response.data.message || 'Signup failed');
+      }
+      return thunkAPI.rejectWithValue('Something went wrong. Please try again.');
     }
   }
 );
@@ -41,12 +40,15 @@ export const login = createAsyncThunk(
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: null, // Initially, no user is stored
-    isAuthenticated: false, // User is not authenticated by default
+    user: null,
+    isAuthenticated: false,
     isLoading: false,
-    error: null
+    error: null,
+    roles: [],
+    rolesError: null, 
   },
   extraReducers: (builder) => {
+    // Handle login
     builder
       .addCase(login.pending, (state) => {
         state.isLoading = true;
@@ -58,6 +60,22 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.error = action.payload;
+      });
+    // Handle signup
+    builder
+      .addCase(signup.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(signup.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.user = null; 
+      })
+      .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;
         state.isAuthenticated = false;
         state.error = action.payload;

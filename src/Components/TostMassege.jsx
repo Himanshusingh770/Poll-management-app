@@ -6,14 +6,17 @@ const ToastMessage = ({
   show,
   onClose,
   message,
-  variant = 'danger',
+  variant = 'danger',  // Default variant is 'danger'
   delay = 6000
 }) => {
+  // Set the title based on the variant
+  const title = variant === 'success' ? 'Success' : 'Error';
+
   return (
-    <ToastContainer className="toast-container" position="bottom-center">
+    <ToastContainer className="toast-container" position="bottom-center ">
       <Toast show={show} onClose={onClose} delay={delay} autohide bg={variant}>
         <Toast.Header closeButton>
-          <strong className="me-auto">Error</strong>
+          <strong className="me-auto">{title}</strong> {/* Dynamic title */}
         </Toast.Header>
         <Toast.Body className="text-light">{message}</Toast.Body>
       </Toast>
