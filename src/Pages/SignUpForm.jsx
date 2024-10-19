@@ -7,7 +7,7 @@ import { signup } from '../slices/authSlice';
 import { fetchRoles } from '../slices/rolesSlice'; //  using API call
 import { validateField, validateForm } from '../utils/validationUtils';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
-import '../App.css'
+import '../App.css';
 // Sample static JSON data for roles
 const rolesData = [
   {
@@ -15,29 +15,29 @@ const rolesData = [
     name: 'Admin',
     description: 'Admin of the company',
     createdAt: '2024-10-14T05:17:30.000Z',
-    updatedAt: '2024-10-14T05:17:30.000Z',
+    updatedAt: '2024-10-14T05:17:30.000Z'
   },
   {
     id: 2,
     name: 'Employee',
     description: 'Employee of the company',
     createdAt: '2024-10-14T05:17:13.000Z',
-    updatedAt: '2024-10-14T05:17:13.000Z',
+    updatedAt: '2024-10-14T05:17:13.000Z'
   },
   {
     id: 3,
     name: 'HR',
     description: 'HR of the company',
     createdAt: '2024-10-14T05:17:21.000Z',
-    updatedAt: '2024-10-14T05:17:21.000Z',
-  },
+    updatedAt: '2024-10-14T05:17:21.000Z'
+  }
 ];
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    roleId: '',  // Changed from role to roleId
+    roleId: '', // Changed from role to roleId
     password: '',
     confirmPassword: ''
   });
@@ -46,7 +46,7 @@ const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const [showConfirmPassword, setshowConfirmPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -79,22 +79,28 @@ const SignUpForm = () => {
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    const error = validateField(value, name, { ...formData, [name]: value }, true);
+    const error = validateField(
+      value,
+      name,
+      { ...formData, [name]: value },
+      true
+    );
     setFormErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: error,
+      [name]: error
     }));
   };
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-
+  const toggleConfirmPasswordVisibility = () =>
+    setshowConfirmPassword(!showConfirmPassword);
   return (
     <Container className="signup-container">
       <Card className="signup-card">
-        <h2 className="text-center mb-2">Sign Up</h2>
+        <h2 className="text-center mb-1">Sign Up</h2>
 
         <Form noValidate onSubmit={handleSubmit}>
-          <Form.Group className="mb-2">
+          <Form.Group className="mb-1">
             <Form.Label>First Name</Form.Label>
             <Form.Control
               type="text"
@@ -122,7 +128,7 @@ const SignUpForm = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-2">
+          <Form.Group className="mb-1">
             <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
@@ -136,26 +142,26 @@ const SignUpForm = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-2">
+          <Form.Group className="mb-1">
             <Form.Label>Role</Form.Label>
             <Form.Control
               as="select"
-              name="roleId"            // Note this change
-              value={formData.roleId}  // roleId is now used
+              name="roleId" // Note this change
+              value={formData.roleId} // roleId is now used
               onChange={handleValueChange}
               isInvalid={!!formErrors.roleId}
             >
               <option value="">Select Role</option>
               {rolesData.length > 0 ? (
                 rolesData.map((role) => (
-                  <option key={role.id} value={role.id}> {/* Use role.id */}
+                  <option key={role.id} value={role.id}>
+                    {' '}
+                    {/* Use role.id */}
                     {role.name}
                   </option>
                 ))
               ) : (
-                <option disabled>
-                  No roles available
-                </option>
+                <option disabled>No roles available</option>
               )}
             </Form.Control>
             <Form.Control.Feedback type="invalid">
@@ -163,7 +169,7 @@ const SignUpForm = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group controlId="formPassword" className="mb-2">
+          <Form.Group controlId="formPassword" className="mb-1">
             <Form.Label>Password</Form.Label>
             <div className="position-relative">
               <Form.Control
@@ -176,7 +182,9 @@ const SignUpForm = () => {
                 isInvalid={!!formErrors.password}
               />
               <span
-                className={`password-toggle-icon ${formErrors.password ? 'mx-5' : 'mx-3'}`}
+                className={`password-toggle-icon ${
+                  formErrors.password ? 'mx-5' : 'mx-3'
+                }`}
                 onClick={togglePasswordVisibility}
               >
                 {showPassword ? <EyeSlashFill /> : <EyeFill />}
@@ -189,38 +197,50 @@ const SignUpForm = () => {
             )}
           </Form.Group>
 
-          <Form.Group className="mb-2">
+          <Form.Group className="mb-3 ">
             <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type={showPassword ? 'text' : 'password'}
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleValueChange}
-              isInvalid={!!formErrors.confirmPassword}
-            />
-            
-            <Form.Control.Feedback type="invalid">
-              {formErrors.confirmPassword}
-            </Form.Control.Feedback>
+            <div className="position-relative">
+              <Form.Control
+                className="pe-5"
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder="Confirm Password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleValueChange}
+                isInvalid={!!formErrors.confirmPassword} // Ensure invalid state triggers
+              />
+              <span
+                className={`password-toggle-icon ${
+                  formErrors.confirmPassword ? 'mx-5' : 'mx-3'
+                }`}
+                onClick={toggleConfirmPasswordVisibility}
+              >
+                {showConfirmPassword ? <EyeSlashFill /> : <EyeFill />}
+              </span>
+            </div>
+
+            {/* Adjusted Feedback Section */}
+            {formErrors.confirmPassword && (
+              <div className="invalid-feedback d-block">
+                {formErrors.confirmPassword}
+              </div>
+            )}
           </Form.Group>
 
           <Button type="submit" disabled={isLoading} className="w-100">
             {isLoading ? <Spinner animation="border" size="sm" /> : 'Sign Up'}
           </Button>
         </Form>
-        <div className="text-center mt-2">
+        <div className="text-center mt-1">
           Already have an account? <Link to="/">Login</Link>
         </div>
-        
       </Card>
       <ToastMessage
-          show={showToast}
-          onClose={() => setShowToast(false)}
-          message="Sign Up Successfully!!"
-          variant="success"
-        />
-
-       
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        message="Sign Up Successfully!!"
+        variant="success"
+      />
     </Container>
   );
 };

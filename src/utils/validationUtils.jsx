@@ -2,7 +2,6 @@ export const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
-
 // Enhanced password validation
 export const isValidPassword = (password) => {
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
@@ -14,17 +13,16 @@ export const isValidName = (name) => {
   return name.length > 3;
 };
 
+
 export const validateField = (value, fieldName, formData, isSignup = false) => {
   if (!value.trim()) {
     return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required.`;
   }
-
- // Name validation 
   
+  // Name validation  
   if ((fieldName === 'firstName') && !isValidName(value)) {
     return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least 3 characters long.`;
   }
-
   if (fieldName === 'email' && !isValidEmail(value)) {
     return 'Please enter a valid email address.';
   }
@@ -41,9 +39,8 @@ export const validateField = (value, fieldName, formData, isSignup = false) => {
       return 'Passwords do not match.';
     }
   }
-  return '';
+  return'';
 };
-
 export const validateForm = (formData, isSignup = false) => {
   let errors = {};
   let isFormValid = true;
