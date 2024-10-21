@@ -71,7 +71,57 @@ const SignUpForm = () => {
     // dispatch(fetchRoles()); // use API call
   }, [dispatch]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { errors, isFormValid } = validateForm(formData, true);
+    setFormErrors(errors);
 
+    if (!isFormValid) return;
+
+    setIsLoading(true);
+    dispatch(signup(formData))
+      .unwrap()
+      .then(() => {
+        setShowModal(true); 
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+
+        // Check for status 500 or any specific error messages
+        if (
+          error?.status === 500 ||
+          error?.message?.includes('already exists')
+        ) {
+          setToastMessage(
+            'Email already exists. Please try with a different email.'
+          );
+          setToastVariant('danger'); 
+        } else {
+          setToastMessage('Email Exist.');
+          setToastVariant('danger'); 
+        }
+        setShowToast(true);
+      });
+  };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () =>
+  setshowConfirmPassword(!showConfirmPassword);
+
+  const handleValueChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    const error = validateField(
+      value,
+      name,
+      { ...formData, [name]: value },
+      true
+    );
+    setFormErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error
+    }));
+  };
   return (
     <div className="signup-main-container">
       <Container className="signup-container">
