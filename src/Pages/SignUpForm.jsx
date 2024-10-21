@@ -89,19 +89,17 @@ const SignUpForm = () => {
         setIsLoading(false);
 
         // Check for status 500 or any specific error messages
-        if (
-          error?.status === 500 ||
-          error?.message?.includes('already exists')
-        ) {
-          setToastMessage(
-            'Email already exists. Please try with a different email.'
-          );
-          setToastVariant('danger'); 
+        if (error?.message) {
+          // Display the exact error message from the API
+          setToastMessage(error.message);
+          setToastVariant('danger');
         } else {
-          setToastMessage('Email Exist.Please try with a different email');
-          setToastVariant('danger'); 
+          // Fallback message for cases where there's no error message from the API
+          setToastMessage('An unexpected error occurred. Please try again.');
+          setToastVariant('danger');
         }
         setShowToast(true);
+        
       });
   };
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -222,7 +220,7 @@ const SignUpForm = () => {
                 </span>
               </div>
               {formErrors.password && (
-                <div className="text-danger text-extra-small">
+                <div className="text-danger password-error">
                   {formErrors.password}
                 </div>
               )}

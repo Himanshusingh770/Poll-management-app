@@ -126,6 +126,10 @@
   background-color: #17a2b8;
   transform: translateY(-2px);
 }
+.password-error{
+  font-size: 15px;
+  line-height: 18px;
+}
 
 /* Model Page css */
 
