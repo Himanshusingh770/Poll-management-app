@@ -2,26 +2,30 @@ export const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
-// Enhanced password validation
+// password validation
 export const isValidPassword = (password) => {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return passwordRegex.test(password);
 };
 
-// New validation for name fields (minimum 3 characters)
+//  validation for name fields minimum 4 characters
 export const isValidName = (name) => {
   return name.length > 3;
 };
 
-
 export const validateField = (value, fieldName, formData, isSignup = false) => {
   if (!value.trim()) {
-    return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required.`;
+    return `${
+      fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+    } is required.`;
   }
-  
-  // Name validation  
-  if ((fieldName === 'firstName') && !isValidName(value)) {
-    return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} must be at least 3 characters long.`;
+
+  // Name validation
+  if ((fieldName === 'firstName' || fieldName === 'lastName' )&& !isValidName(value)) {
+    return `${
+      fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+    } must be at least 4 characters long.`;
   }
   if (fieldName === 'email' && !isValidEmail(value)) {
     return 'Please enter a valid email address.';
@@ -31,7 +35,7 @@ export const validateField = (value, fieldName, formData, isSignup = false) => {
       return '';
     }
     if (!isValidPassword(value)) {
-      return 'Password must be at least 6 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.';
+      return 'Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.';
     }
   }
   if (isSignup && fieldName === 'confirmPassword') {
@@ -39,7 +43,7 @@ export const validateField = (value, fieldName, formData, isSignup = false) => {
       return 'Passwords do not match.';
     }
   }
-  return'';
+  return '';
 };
 export const validateForm = (formData, isSignup = false) => {
   let errors = {};

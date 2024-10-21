@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Container, Card, Spinner } from 'react-bootstrap';
-import ToastMessage from '../Components/TostMassege';
+import { Form,  Container, Card } from 'react-bootstrap';
+import ToastMessage from '../Components/TostMassege'; // Ensure the path is correct
 import { signup } from '../slices/authSlice';
-import { fetchRoles } from '../slices/rolesSlice'; //  using API call
+import { fetchRoles } from '../slices/rolesSlice'; // Using API call
 import { validateField, validateForm } from '../utils/validationUtils';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import '../App.css';
-// Sample static JSON data for roles
+import SuccessModal from '../Components/SucessModel';
+import CustomButton from '../Button/CustomButton';
+
+// Sample static JSON data for roles when fatch api then remove this data
 const rolesData = [
   {
     id: 1,
@@ -30,8 +33,17 @@ const rolesData = [
     description: 'HR of the company',
     createdAt: '2024-10-14T05:17:21.000Z',
     updatedAt: '2024-10-14T05:17:21.000Z'
+  },
+  {
+    id: 5,
+    name: 'pilot',
+    description:
+      'A pilot is trained to operate aircraft. As part of their duties, they file flight plans, perform maintenance checks and ensure the craft is ready for departure',
+    createdAt: '2024-10-18T10:23:44.000Z',
+    updatedAt: '2024-10-18T10:23:44.000Z'
   }
 ];
+
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -45,14 +57,16 @@ const SignUpForm = () => {
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState(''); // for internal server 500 error
+  const [toastVariant, setToastVariant] = useState('success'); // Variant state
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setshowConfirmPassword] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const roles = useSelector((state) => state.roles.roles); //  using API
-  // const rolesError = useSelector((state) => state.roles.error); // when using API
-
+  // Uncomment this line to use API roles fetching
+  // useEffect(() => { dispatch(fetchRoles()); }, [dispatch]);
   useEffect(() => {
     // dispatch(fetchRoles()); // use API call
   }, [dispatch]);
@@ -68,13 +82,31 @@ const SignUpForm = () => {
     dispatch(signup(formData))
       .unwrap()
       .then(() => {
-        setShowToast(true);
-        setTimeout(() => {
-          navigate('/');
-        }, 2000);
+        setShowModal(true); 
+        setIsLoading(false);
       })
-      .catch(() => setIsLoading(false));
+      .catch((error) => {
+        setIsLoading(false);
+
+        // Check for status 500 or any specific error messages
+        if (
+          error?.status === 500 ||
+          error?.message?.includes('already exists')
+        ) {
+          setToastMessage(
+            'Email already exists. Please try with a different email.'
+          );
+          setToastVariant('danger'); 
+        } else {
+          setToastMessage('Email Exist.');
+          setToastVariant('danger'); 
+        }
+        setShowToast(true);
+      });
   };
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () =>
+  setshowConfirmPassword(!showConfirmPassword);
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
@@ -90,158 +122,166 @@ const SignUpForm = () => {
       [name]: error
     }));
   };
-
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const toggleConfirmPasswordVisibility = () =>
-    setshowConfirmPassword(!showConfirmPassword);
   return (
-    <Container className="signup-container">
-      <Card className="signup-card">
-        <h2 className="text-center mb-1">Sign Up</h2>
+    <div className="signup-main-container">
+      <Container className="signup-container">
+        <Card className="signup-card">
+          <h2 className="text-center mb-1">Sign Up</h2>
 
-        <Form noValidate onSubmit={handleSubmit}>
-          <Form.Group className="mb-1">
-            <Form.Label>First Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleValueChange}
-              isInvalid={!!formErrors.firstName}
-            />
-            <Form.Control.Feedback type="invalid">
-              {formErrors.firstName}
-            </Form.Control.Feedback>
-          </Form.Group>
+          <Form noValidate onSubmit={handleSubmit}>
+            <Form.Group className="mb-1 px-4">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleValueChange}
+                isInvalid={!!formErrors.firstName}
+                isValid={formErrors.firstName === ''}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.firstName}
+              </Form.Control.Feedback>
+            </Form.Group>
 
-          <Form.Group className="mb-1">
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleValueChange}
-              isInvalid={!!formErrors.lastName}
-            />
-            <Form.Control.Feedback type="invalid">
-              {formErrors.lastName}
-            </Form.Control.Feedback>
-          </Form.Group>
+            <Form.Group className="mb-1 px-4">
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleValueChange}
+                isInvalid={!!formErrors.lastName}
+                isValid={formErrors.lastName === ''}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.lastName}
+              </Form.Control.Feedback>
+            </Form.Group>
 
-          <Form.Group className="mb-1">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleValueChange}
-              isInvalid={!!formErrors.email}
-            />
-            <Form.Control.Feedback type="invalid">
-              {formErrors.email}
-            </Form.Control.Feedback>
-          </Form.Group>
+            <Form.Group className="mb-1 px-4">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleValueChange}
+                isInvalid={!!formErrors.email}
+                isValid={formErrors.email === ''}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formErrors.email}
+              </Form.Control.Feedback>
+            </Form.Group>
 
-          <Form.Group className="mb-1">
-            <Form.Label>Role</Form.Label>
-            <Form.Control
-              as="select"
-              name="roleId" // Note this change
-              value={formData.roleId} // roleId is now used
-              onChange={handleValueChange}
-              isInvalid={!!formErrors.roleId}
-            >
-              <option value="">Select Role</option>
-              {rolesData.length > 0 ? (
-                rolesData.map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {' '}
-                    {/* Use role.id */}
-                    {role.name}
-                  </option>
-                ))
-              ) : (
-                <option disabled>No roles available</option>
+            <Form.Group className="mb-1 px-4">
+              <Form.Label>Role</Form.Label>
+              <Form.Control
+                as="select"
+                name="roleId"
+                value={formData.roleId}
+                onChange={handleValueChange}
+                isInvalid={!!formErrors.roleId}
+                isValid={formErrors.roleId === ''}
+              >
+                <option value="">Select Role</option>
+                {rolesData.length > 0 ? (
+                  rolesData.map((role) => (
+                    <option key={role.id} value={role.id}>
+                      {role.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>No roles available</option>
+                )}
+              </Form.Control>
+              <Form.Control.Feedback type="invalid">
+                {formErrors.roleId}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="formPassword" className="mb-1 px-4">
+              <Form.Label>Password</Form.Label>
+              <div className="position-relative">
+                <Form.Control
+                  className="pe-5"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleValueChange}
+                  isInvalid={!!formErrors.password}
+                />
+                <span
+                  className={`password-toggle-icon ${
+                    formErrors.password ? 'mx-5' : 'mx-3'
+                  }`}
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <EyeFill /> : <EyeSlashFill />}
+                </span>
+              </div>
+              {formErrors.password && (
+                <div className="text-danger text-extra-small">
+                  {formErrors.password}
+                </div>
               )}
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              {formErrors.roleId}
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group controlId="formPassword" className="mb-1">
-            <Form.Label>Password</Form.Label>
-            <div className="position-relative">
-              <Form.Control
-                className="pe-5"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                name="password"
-                value={formData.password}
-                onChange={handleValueChange}
-                isInvalid={!!formErrors.password}
-              />
-              <span
-                className={`password-toggle-icon ${
-                  formErrors.password ? 'mx-5' : 'mx-3'
-                }`}
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <EyeSlashFill /> : <EyeFill />}
-              </span>
-            </div>
-            {formErrors.password && (
-              <div className="text-danger mt-1 text-error">
-                {formErrors.password}
+            </Form.Group>
+            <Form.Group className="mb-3 px-4">
+              <Form.Label>Confirm Password</Form.Label>
+              <div className="position-relative">
+                <Form.Control
+                  className="pe-5"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleValueChange}
+                  isInvalid={!!formErrors.confirmPassword}
+                />
+                <span
+                  className={`password-toggle-icon ${
+                    formErrors.confirmPassword ? 'mx-5' : 'mx-3'
+                  }`}
+                  onClick={toggleConfirmPasswordVisibility}
+                >
+                  {showConfirmPassword ? <EyeFill /> : <EyeSlashFill />}
+                </span>
               </div>
-            )}
-          </Form.Group>
+              {formErrors.confirmPassword && (
+                <div className="invalid-feedback d-block">
+                  {formErrors.confirmPassword}
+                </div>
+              )}
+            </Form.Group>
 
-          <Form.Group className="mb-3 ">
-            <Form.Label>Confirm Password</Form.Label>
-            <div className="position-relative">
-              <Form.Control
-                className="pe-5"
-                type={showConfirmPassword ? 'text' : 'password'}
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleValueChange}
-                isInvalid={!!formErrors.confirmPassword} // Ensure invalid state triggers
-              />
-              <span
-                className={`password-toggle-icon ${
-                  formErrors.confirmPassword ? 'mx-5' : 'mx-3'
-                }`}
-                onClick={toggleConfirmPasswordVisibility}
+            <div className="px-4">
+              <CustomButton
+                type="submit"
+                isLoading={isLoading}
+                variant="success"
+                className="signup-button" 
               >
-                {showConfirmPassword ? <EyeSlashFill /> : <EyeFill />}
-              </span>
+                Sign Up
+              </CustomButton>
             </div>
+          </Form>
+          <div className="text-center mt-3 mb-4">
+            Already have an account? <Link to="/">Login</Link>
+          </div>
+        </Card>
 
-            {/* Adjusted Feedback Section */}
-            {formErrors.confirmPassword && (
-              <div className="invalid-feedback d-block">
-                {formErrors.confirmPassword}
-              </div>
-            )}
-          </Form.Group>
+        {/* Updated ToastMessage with the correct variant */}
 
-          <Button type="submit" disabled={isLoading} className="w-100">
-            {isLoading ? <Spinner animation="border" size="sm" /> : 'Sign Up'}
-          </Button>
-        </Form>
-        <div className="text-center mt-1">
-          Already have an account? <Link to="/">Login</Link>
-        </div>
-      </Card>
-      <ToastMessage
-        show={showToast}
-        onClose={() => setShowToast(false)}
-        message="Sign Up Successfully!!"
-        variant="success"
-      />
-    </Container>
+        <ToastMessage
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          message={toastMessage}
+          variant={toastVariant} 
+        />
+        <SuccessModal show={showModal} onClose={() => setShowModal(false)} />
+      </Container>
+    </div>
   );
 };
 
