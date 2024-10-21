@@ -1,8 +1,8 @@
 /* App.css */
 .toast-container {
   position: absolute;
-  left: 50%;
-  bottom: 10%;
+  left: 85%;
+  bottom: 5%;
   transform: translateX(-50%);
   z-index: 1050; 
 }

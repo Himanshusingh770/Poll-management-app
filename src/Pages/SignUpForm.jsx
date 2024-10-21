@@ -98,7 +98,7 @@ const SignUpForm = () => {
           );
           setToastVariant('danger'); 
         } else {
-          setToastMessage('Email Exist.');
+          setToastMessage('Email Exist.Please try with a different email');
           setToastVariant('danger'); 
         }
         setShowToast(true);

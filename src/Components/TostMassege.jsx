@@ -1,6 +1,7 @@
-import React from 'react';
-import { Toast, ToastContainer } from 'react-bootstrap';
-import '../App.css';  
+import React, { useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  
+import '../App.css';
 
 const ToastMessage = ({
   show,
@@ -9,19 +10,31 @@ const ToastMessage = ({
   variant = 'danger', 
   delay = 6000
 }) => {
-  // Set the title based on the variant
   const title = variant === 'success' ? 'Success' : 'Error';
+  
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: delay,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    onClose: onClose,
+    theme: "colored",
+  };
 
-  return (
-    <ToastContainer className="toast-container" position="bottom-center ">
-      <Toast show={show} onClose={onClose} delay={delay} autohide bg={variant}>
-        <Toast.Header closeButton>
-          <strong className="me-auto">{title}</strong>
-        </Toast.Header>
-        <Toast.Body className="text-light">{message}</Toast.Body>
-      </Toast>
-    </ToastContainer>
-  );
+  useEffect(() => {
+    if (show) {
+      if (variant === 'success') {
+        toast.success(`${title}: ${message}`, toastOptions);
+      } else {
+        toast.error(`${title}: ${message}`, toastOptions);
+      }
+    }
+  }, [show, message, variant]); // Only run when `show`, `message`, or `variant` changes
+
+  return <ToastContainer />;
 };
 
 export default ToastMessage;
