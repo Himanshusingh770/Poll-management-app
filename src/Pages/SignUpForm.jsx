@@ -10,8 +10,8 @@ import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import '../App.css';
 import SuccessModal from '../Components/SucessModel';
 import CustomButton from '../Button/CustomButton';
+// Simple JSON Data when Api Run Remove this
 
-// Sample static JSON data for roles when fatch api then remove this data
 const rolesData = [
   {
     id: 1,
