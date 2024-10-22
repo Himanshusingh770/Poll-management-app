@@ -11,7 +11,6 @@ import '../App.css';
 import SuccessModal from '../Components/SucessModel';
 import CustomButton from '../Button/CustomButton';
 // Simple JSON Data when Api Run Remove this
-
 const rolesData = [
   {
     id: 1,
@@ -49,11 +48,10 @@ const SignUpForm = () => {
     firstName: '',
     lastName: '',
     email: '',
-    roleId: '', // Changed from role to roleId
+    roleId: '',    // Changed from role to roleId
     password: '',
     confirmPassword: ''
   });
-
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -95,7 +93,7 @@ const SignUpForm = () => {
           setToastVariant('danger');
         } else {
           // Fallback message for cases where there's no error message from the API
-          setToastMessage('An unexpected error occurred. Please try again.');
+          setToastMessage('Server Not responed.');
           setToastVariant('danger');
         }
         setShowToast(true);

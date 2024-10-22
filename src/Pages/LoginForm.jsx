@@ -9,7 +9,6 @@ import ToastMessage from '../Components/TostMassege';
 import { Link } from 'react-router-dom';
 import CustomButton from '../Button/CustomButton';
 import '../App.css';
-
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
@@ -18,11 +17,9 @@ const Login = () => {
     email: '',
     password: ''
   });
-
   const { isLoading, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const { errors, isFormValid } = validateForm(formData, false);
