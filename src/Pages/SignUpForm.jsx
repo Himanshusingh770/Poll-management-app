@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form,  Container, Card } from 'react-bootstrap';
+import { Form, Container, Card } from 'react-bootstrap';
 import ToastMessage from '../Components/TostMassege'; // Ensure the path is correct
 import { signup } from '../slices/authSlice';
 import { fetchRoles } from '../slices/rolesSlice'; // Using API call
@@ -9,29 +9,30 @@ import { validateField, validateForm } from '../utils/validationUtils';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import '../App.css';
 import SuccessModal from '../Components/SucessModel';
-import CustomButton from '../Button/CustomButton';
-// Simple JSON Data when Api Run Remove this
+import CustomButton from '../Components/ButtonModel/CustomButtonModel';
+
+// Simple JSON Data when API runs, remove this when using API
 const rolesData = [
   {
     id: 1,
     name: 'Admin',
     description: 'Admin of the company',
     createdAt: '2024-10-14T05:17:30.000Z',
-    updatedAt: '2024-10-14T05:17:30.000Z'
+    updatedAt: '2024-10-14T05:17:30.000Z',
   },
   {
     id: 2,
     name: 'Employee',
     description: 'Employee of the company',
     createdAt: '2024-10-14T05:17:13.000Z',
-    updatedAt: '2024-10-14T05:17:13.000Z'
+    updatedAt: '2024-10-14T05:17:13.000Z',
   },
   {
     id: 3,
     name: 'HR',
     description: 'HR of the company',
     createdAt: '2024-10-14T05:17:21.000Z',
-    updatedAt: '2024-10-14T05:17:21.000Z'
+    updatedAt: '2024-10-14T05:17:21.000Z',
   },
   {
     id: 5,
@@ -39,8 +40,8 @@ const rolesData = [
     description:
       'A pilot is trained to operate aircraft. As part of their duties, they file flight plans, perform maintenance checks and ensure the craft is ready for departure',
     createdAt: '2024-10-18T10:23:44.000Z',
-    updatedAt: '2024-10-18T10:23:44.000Z'
-  }
+    updatedAt: '2024-10-18T10:23:44.000Z',
+  },
 ];
 
 const SignUpForm = () => {
@@ -48,18 +49,16 @@ const SignUpForm = () => {
     firstName: '',
     lastName: '',
     email: '',
-    roleId: '',    // Changed from role to roleId
+    roleId: '', // Changed from role to roleId
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState(''); // for internal server 500 error
-  const [toastVariant, setToastVariant] = useState('success'); // Variant state
+  const [toast, setToast] = useState({ show: false, message: '', variant: 'success' }); 
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setshowConfirmPassword] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showOkModal, setshowOkModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -69,7 +68,7 @@ const SignUpForm = () => {
     // dispatch(fetchRoles()); // use API call
   }, [dispatch]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { errors, isFormValid } = validateForm(formData, true);
     setFormErrors(errors);
@@ -77,47 +76,43 @@ const SignUpForm = () => {
     if (!isFormValid) return;
 
     setIsLoading(true);
-    dispatch(signup(formData))
-      .unwrap()
-      .then(() => {
-        setShowModal(true); 
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        setIsLoading(false);
-
-        // Check for status 500 or any specific error messages
-        if (error?.message) {
-          // Display the exact error message from the API
-          setToastMessage(error.message);
-          setToastVariant('danger');
-        } else {
-          // Fallback message for cases where there's no error message from the API
-          setToastMessage('Server Not responed.');
-          setToastVariant('danger');
-        }
-        setShowToast(true);
-        
+    try {
+      await dispatch(signup(formData)).unwrap();
+      setshowOkModal(true);
+    } catch (error) {
+      setToast({
+        show: true,
+        message: error?.message || 'Email Alredy Exist Try with another email.',
+        variant: 'danger',
       });
+    } finally {
+      setIsLoading(false);
+    }
   };
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const toggleConfirmPasswordVisibility = () =>
-  setshowConfirmPassword(!showConfirmPassword);
+
+  const togglePasswordVisibility = (field) => {
+    if (field === 'password') {
+      setShowPassword(!showPassword);
+    } else if (field === 'confirmPassword') {
+      setShowConfirmPassword(!showConfirmPassword);
+    }
+  };
 
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    const error = validateField(
-      value,
-      name,
-      { ...formData, [name]: value },
-      true
-    );
+    const error = validateField(value, name, { ...formData, [name]: value }, true);
     setFormErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: error
+      [name]: error,
     }));
   };
+
+  const handleModalOkClick = () => {
+    navigate('/'); 
+    setshowOkModal(false);
+  };
+
   return (
     <div className="signup-main-container">
       <Container className="signup-container">
@@ -125,6 +120,7 @@ const SignUpForm = () => {
           <h2 className="text-center mb-1">Sign Up</h2>
 
           <Form noValidate onSubmit={handleSubmit}>
+            {/* First Name Field */}
             <Form.Group className="mb-1 px-4">
               <Form.Label>First Name</Form.Label>
               <Form.Control
@@ -140,6 +136,7 @@ const SignUpForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
+            {/* Last Name Field */}
             <Form.Group className="mb-1 px-4">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
@@ -155,6 +152,7 @@ const SignUpForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
+            {/* Email Field */}
             <Form.Group className="mb-1 px-4">
               <Form.Label>Email</Form.Label>
               <Form.Control
@@ -170,6 +168,7 @@ const SignUpForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
+            {/* Role Selection */}
             <Form.Group className="mb-1 px-4">
               <Form.Label>Role</Form.Label>
               <Form.Control
@@ -196,6 +195,7 @@ const SignUpForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
+            {/* Password Field */}
             <Form.Group controlId="formPassword" className="mb-1 px-4">
               <Form.Label>Password</Form.Label>
               <div className="position-relative">
@@ -212,7 +212,7 @@ const SignUpForm = () => {
                   className={`password-toggle-icon ${
                     formErrors.password ? 'mx-5' : 'mx-3'
                   }`}
-                  onClick={togglePasswordVisibility}
+                  onClick={() => togglePasswordVisibility('password')}
                 >
                   {showPassword ? <EyeFill /> : <EyeSlashFill />}
                 </span>
@@ -223,6 +223,8 @@ const SignUpForm = () => {
                 </div>
               )}
             </Form.Group>
+
+            {/* Confirm Password Field */}
             <Form.Group className="mb-3 px-4">
               <Form.Label>Confirm Password</Form.Label>
               <div className="position-relative">
@@ -239,7 +241,7 @@ const SignUpForm = () => {
                   className={`password-toggle-icon ${
                     formErrors.confirmPassword ? 'mx-5' : 'mx-3'
                   }`}
-                  onClick={toggleConfirmPasswordVisibility}
+                  onClick={() => togglePasswordVisibility('confirmPassword')}
                 >
                   {showConfirmPassword ? <EyeFill /> : <EyeSlashFill />}
                 </span>
@@ -251,34 +253,45 @@ const SignUpForm = () => {
               )}
             </Form.Group>
 
+            {/* Submit Button */}
             <div className="px-4">
               <CustomButton
                 type="submit"
                 isLoading={isLoading}
                 variant="success"
-                className="signup-button" 
+                className="signup-button"
               >
                 Sign Up
               </CustomButton>
             </div>
           </Form>
+
+          {/* Link to Login */}
           <div className="text-center mt-3 mb-4">
             Already have an account? <Link to="/">Login</Link>
           </div>
         </Card>
 
-        {/* Updated ToastMessage with the correct variant */}
-
+        {/* Toast Message for Error Handling */}
         <ToastMessage
-          show={showToast}
-          onClose={() => setShowToast(false)}
-          message={toastMessage}
-          variant={toastVariant} 
+          show={toast.show}
+          onClose={() => setToast({ ...toast, show: false })}
+          message={toast.message}
+          variant={toast.variant}
         />
-        <SuccessModal show={showModal} onClose={() => setShowModal(false)} />
+
+        {/* Success Modal */}
+        <SuccessModal
+          show={showOkModal}
+          onClose={() => setshowOkModal(false)}
+          message="Sign Up Successfully!!"
+          okButton="OK"
+          onOkClick={handleModalOkClick}
+        />
       </Container>
     </div>
   );
 };
 
 export default SignUpForm;
+
