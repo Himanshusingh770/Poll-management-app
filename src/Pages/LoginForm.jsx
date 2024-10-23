@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Container, Card } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { validateField, validateForm } from '../utils/validationUtils';
-import ToastMessage from '../Components/TostMassege';
+import ToastMessage from '../Components/ToastMessage';
 import { Link } from 'react-router-dom';
 import CustomButton from '../Components/ButtonModel/CustomButtonModel';
 import '../App.css';

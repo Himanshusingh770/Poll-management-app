@@ -3,8 +3,7 @@ import { Form } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 
 const PasswordField = ({ label, name, value, onChange, error }) => {
-  const [showPassword, setShowPassword] = useState(false); // State is now managed internally
-
+  const [showPassword, setShowPassword] = useState(false); 
   return (
     <Form.Group className="mb-1 px-4">
       <Form.Label>{label}</Form.Label>
