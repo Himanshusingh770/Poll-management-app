@@ -32,7 +32,7 @@ const ToastMessage = ({
         toast.error(`${title}: ${message}`, toastOptions);
       }
     }
-  }, [show, message, variant]); // Only run when `show`, `message`, or `variant` changes
+  }, [show, message, variant]); 
 
   return <ToastContainer />;
 };

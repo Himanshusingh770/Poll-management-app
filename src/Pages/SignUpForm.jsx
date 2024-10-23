@@ -4,46 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Form, Container, Card } from 'react-bootstrap';
 import ToastMessage from '../Components/TostMassege'; // Ensure the path is correct
 import { signup } from '../slices/authSlice';
-import { fetchRoles } from '../slices/rolesSlice'; // Using API call
+import { fetchRoles } from '../slices/rolesSlice';
 import { validateField, validateForm } from '../utils/validationUtils';
-import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import '../App.css';
 import SuccessModal from '../Components/SucessModel';
 import CustomButton from '../Components/ButtonModel/CustomButtonModel';
+import PasswordField from '../Components/PasswordField';
+import rolesData from '../Components/Data/roles.json';
 
 // Simple JSON Data when API runs, remove this when using API
-const rolesData = [
-  {
-    id: 1,
-    name: 'Admin',
-    description: 'Admin of the company',
-    createdAt: '2024-10-14T05:17:30.000Z',
-    updatedAt: '2024-10-14T05:17:30.000Z',
-  },
-  {
-    id: 2,
-    name: 'Employee',
-    description: 'Employee of the company',
-    createdAt: '2024-10-14T05:17:13.000Z',
-    updatedAt: '2024-10-14T05:17:13.000Z',
-  },
-  {
-    id: 3,
-    name: 'HR',
-    description: 'HR of the company',
-    createdAt: '2024-10-14T05:17:21.000Z',
-    updatedAt: '2024-10-14T05:17:21.000Z',
-  },
-  {
-    id: 5,
-    name: 'pilot',
-    description:
-      'A pilot is trained to operate aircraft. As part of their duties, they file flight plans, perform maintenance checks and ensure the craft is ready for departure',
-    createdAt: '2024-10-18T10:23:44.000Z',
-    updatedAt: '2024-10-18T10:23:44.000Z',
-  },
-];
-
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -51,19 +20,21 @@ const SignUpForm = () => {
     email: '',
     roleId: '', // Changed from role to roleId
     password: '',
-    confirmPassword: '',
+    confirmPassword: ''
   });
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [toast, setToast] = useState({ show: false, message: '', variant: 'success' }); 
+  const [toast, setToast] = useState({
+    show: false,
+    message: '',
+    variant: 'success'
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showOkModal, setshowOkModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Uncomment this line to use API roles fetching
-  // useEffect(() => { dispatch(fetchRoles()); }, [dispatch]);
   useEffect(() => {
     // dispatch(fetchRoles()); // use API call
   }, [dispatch]);
@@ -83,33 +54,30 @@ const SignUpForm = () => {
       setToast({
         show: true,
         message: error?.message || 'Email Alredy Exist Try with another email.',
-        variant: 'danger',
+        variant: 'danger'
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const togglePasswordVisibility = (field) => {
-    if (field === 'password') {
-      setShowPassword(!showPassword);
-    } else if (field === 'confirmPassword') {
-      setShowConfirmPassword(!showConfirmPassword);
-    }
-  };
-
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    const error = validateField(value, name, { ...formData, [name]: value }, true);
+    const error = validateField(
+      value,
+      name,
+      { ...formData, [name]: value },
+      true
+    );
     setFormErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: error,
+      [name]: error
     }));
   };
 
   const handleModalOkClick = () => {
-    navigate('/'); 
+    navigate('/');
     setshowOkModal(false);
   };
 
@@ -195,63 +163,29 @@ const SignUpForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            {/* Password Field */}
-            <Form.Group controlId="formPassword" className="mb-1 px-4">
-              <Form.Label>Password</Form.Label>
-              <div className="position-relative">
-                <Form.Control
-                  className="pe-5"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleValueChange}
-                  isInvalid={!!formErrors.password}
-                />
-                <span
-                  className={`password-toggle-icon ${
-                    formErrors.password ? 'mx-5' : 'mx-3'
-                  }`}
-                  onClick={() => togglePasswordVisibility('password')}
-                >
-                  {showPassword ? <EyeFill /> : <EyeSlashFill />}
-                </span>
-              </div>
-              {formErrors.password && (
-                <div className="text-danger password-error">
-                  {formErrors.password}
-                </div>
-              )}
-            </Form.Group>
+            {/* Password Field using PasswordField component */}
+            <PasswordField
+              label="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleValueChange}
+              error={formErrors.password}
+              showPassword={showPassword}
+              toggleVisibility={() => setShowPassword(!showPassword)}
+            />
 
-            {/* Confirm Password Field */}
-            <Form.Group className="mb-3 px-4">
-              <Form.Label>Confirm Password</Form.Label>
-              <div className="position-relative">
-                <Form.Control
-                  className="pe-5"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Confirm Password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleValueChange}
-                  isInvalid={!!formErrors.confirmPassword}
-                />
-                <span
-                  className={`password-toggle-icon ${
-                    formErrors.confirmPassword ? 'mx-5' : 'mx-3'
-                  }`}
-                  onClick={() => togglePasswordVisibility('confirmPassword')}
-                >
-                  {showConfirmPassword ? <EyeFill /> : <EyeSlashFill />}
-                </span>
-              </div>
-              {formErrors.confirmPassword && (
-                <div className="invalid-feedback d-block">
-                  {formErrors.confirmPassword}
-                </div>
-              )}
-            </Form.Group>
+            {/* Confirm Password Field using PasswordField component */}
+            <PasswordField
+              label="Confirm Password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleValueChange}
+              error={formErrors.confirmPassword}
+              showPassword={showConfirmPassword}
+              toggleVisibility={() =>
+                setShowConfirmPassword(!showConfirmPassword)
+              }
+            />
 
             {/* Submit Button */}
             <div className="px-4">
@@ -294,4 +228,3 @@ const SignUpForm = () => {
 };
 
 export default SignUpForm;
-

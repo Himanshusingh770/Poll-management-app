@@ -1,46 +1,32 @@
 // PasswordField.js
-import React, { useState } from 'react';
+import React from 'react';
 import { Form } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 
-const PasswordField = ({
-  label,
-  name,
-  value,
-  onChange,
-  isInvalid,
-  errorMessage,
-  placeholder,
-}) => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
+const PasswordField = ({ label, name, value, onChange, error, showPassword, toggleVisibility }) => {
   return (
-    <Form.Group className="mb-3 px-4">
+    <Form.Group className="mb-1 px-4">
       <Form.Label>{label}</Form.Label>
       <div className="position-relative">
         <Form.Control
           className="pe-5"
           type={showPassword ? 'text' : 'password'}
-          placeholder={placeholder}
+          placeholder={label}
           name={name}
           value={value}
           onChange={onChange}
-          isInvalid={isInvalid}
+          isInvalid={!!error}
         />
         <span
-          className={`password-toggle-icon ${isInvalid ? 'mx-5' : 'mx-3'}`}
-          onClick={togglePasswordVisibility}
+          className={`password-toggle-icon ${error ? 'mx-5' : 'mx-3'}`}
+          onClick={toggleVisibility}
         >
           {showPassword ? <EyeFill /> : <EyeSlashFill />}
         </span>
       </div>
-      {isInvalid && (
-        <div className="invalid-feedback d-block">
-          {errorMessage}
+      {error && (
+        <div className="text-danger password-error">
+          {error}
         </div>
       )}
     </Form.Group>
