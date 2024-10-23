@@ -10,18 +10,18 @@ import '../App.css';
 import SuccessModal from '../Components/SucessModel';
 import CustomButton from '../Components/ButtonModel/CustomButtonModel';
 import PasswordField from '../Components/PasswordField';
-import rolesData from '../Components/Data/roles.json';
+import rolesData from '../Data/roles.json';
 
-// Simple JSON Data when API runs, remove this when using API
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
-    roleId: '', // Changed from role to roleId
+    roleId: '',
     password: '',
     confirmPassword: ''
   });
+
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState({
@@ -29,9 +29,7 @@ const SignUpForm = () => {
     message: '',
     variant: 'success'
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showOkModal, setshowOkModal] = useState(false);
+  const [SignupSuccessModal, setSignupSuccessModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +47,7 @@ const SignUpForm = () => {
     setIsLoading(true);
     try {
       await dispatch(signup(formData)).unwrap();
-      setshowOkModal(true);
+      setSignupSuccessModal(true);
     } catch (error) {
       setToast({
         show: true,
@@ -78,7 +76,7 @@ const SignUpForm = () => {
 
   const handleModalOkClick = () => {
     navigate('/');
-    setshowOkModal(false);
+    setSignupSuccessModal(false);
   };
 
   return (
@@ -163,28 +161,22 @@ const SignUpForm = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            {/* Password Field using PasswordField component */}
+            {/* Password Field */}
             <PasswordField
               label="Password"
               name="password"
               value={formData.password}
               onChange={handleValueChange}
               error={formErrors.password}
-              showPassword={showPassword}
-              toggleVisibility={() => setShowPassword(!showPassword)}
             />
 
-            {/* Confirm Password Field using PasswordField component */}
+            {/* Confirm Password Field */}
             <PasswordField
               label="Confirm Password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleValueChange}
               error={formErrors.confirmPassword}
-              showPassword={showConfirmPassword}
-              toggleVisibility={() =>
-                setShowConfirmPassword(!showConfirmPassword)
-              }
             />
 
             {/* Submit Button */}
@@ -216,9 +208,10 @@ const SignUpForm = () => {
 
         {/* Success Modal */}
         <SuccessModal
-          show={showOkModal}
-          onClose={() => setshowOkModal(false)}
+          show={SignupSuccessModal}
+          onClose={() => setSignupSuccessModal(false)}
           message="Sign Up Successfully!!"
+          subtext="Your account has been created successfully. You can now log in."
           okButton="OK"
           onOkClick={handleModalOkClick}
         />

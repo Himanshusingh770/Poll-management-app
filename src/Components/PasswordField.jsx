@@ -1,9 +1,10 @@
-// PasswordField.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 
-const PasswordField = ({ label, name, value, onChange, error, showPassword, toggleVisibility }) => {
+const PasswordField = ({ label, name, value, onChange, error }) => {
+  const [showPassword, setShowPassword] = useState(false); // State is now managed internally
+
   return (
     <Form.Group className="mb-1 px-4">
       <Form.Label>{label}</Form.Label>
@@ -19,16 +20,12 @@ const PasswordField = ({ label, name, value, onChange, error, showPassword, togg
         />
         <span
           className={`password-toggle-icon ${error ? 'mx-5' : 'mx-3'}`}
-          onClick={toggleVisibility}
+          onClick={() => setShowPassword(!showPassword)}
         >
           {showPassword ? <EyeFill /> : <EyeSlashFill />}
         </span>
       </div>
-      {error && (
-        <div className="text-danger password-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-danger password-error">{error}</div>}
     </Form.Group>
   );
 };

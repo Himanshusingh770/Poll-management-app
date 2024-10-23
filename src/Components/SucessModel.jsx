@@ -2,12 +2,12 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import '../App.css';
 
-const SuccessModal = ({ show, onClose, message, okButton, onOkClick }) => {
+const SuccessModal = ({ show, message,subtext, okButton, onOkClick }) => {
   return (
     <Modal show={show} centered size="sm">
       <Modal.Body className="text-center">
         <p className="text-success fs-4">{message}</p>
-        <p>Your account has been created successfully. You can now log in.</p>
+        <p>{subtext}</p>
       </Modal.Body>
       <Modal.Footer className="justify-content-center">
         <Button
