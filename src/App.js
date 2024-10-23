@@ -5,7 +5,7 @@ import Login from './Pages/LoginForm';
 import SignUpForm from './Pages/SignUpForm';
 import PollList from './Pages/PollList';
 import ProtectedRoute from './Routes//ProtectedRoutes' // Import the ProtectedRoute component
-
+import './App.css'
 const App = () => {
   return (
     <Routes>

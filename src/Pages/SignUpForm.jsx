@@ -6,7 +6,6 @@ import ToastMessage from '../Components/ToastMessage'; // Ensure the path is cor
 import { signup } from '../slices/authSlice';
 import { fetchRoles } from '../slices/rolesSlice';
 import { validateField, validateForm } from '../utils/validationUtils';
-import '../App.css';
 import SuccessModal from '../Components/SuccessModal';
 import CustomButton from '../Components/ButtonModal/CustomButtonModel';
 import PasswordField from '../Components/PasswordField';
