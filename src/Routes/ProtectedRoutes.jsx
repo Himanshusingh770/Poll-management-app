@@ -1,12 +1,16 @@
-// src/components/ProtectedRoute.js
 import React from 'react';
-import { Navigate } from 'react-router-dom'; // Import Navigate for redirection
-import { useSelector } from 'react-redux'; // Import useSelector to access Redux state
+import { Navigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux'; 
 
 const ProtectedRoute = ({ element }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth); // Accessing authentication state from Redux
+  const { isAuthenticated } = useSelector((state) => state.auth); 
+  const location = useLocation(); // Get the current location
+  if (!isAuthenticated) {
+    // If not authenticated and not on the signup page, redirect to login
+    return location.pathname === '/signup' ? element : <Navigate to="/" replace />;
+  }
 
-  return isAuthenticated ? element : <Navigate to="/" replace />; // Render element if authenticated, else redirect to login
+  return element; // Render the protected element if authenticated
 };
 
 export default ProtectedRoute;
