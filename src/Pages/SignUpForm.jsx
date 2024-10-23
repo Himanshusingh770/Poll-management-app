@@ -9,7 +9,7 @@ import { validateField, validateForm } from '../utils/validationUtils';
 import SuccessModal from '../Components/SuccessModal';
 import CustomButton from '../Components/ButtonModal/CustomButtonModel';
 import PasswordField from '../Components/PasswordField';
-import rolesData from '../Data/roles.json';
+
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
@@ -31,10 +31,10 @@ const SignUpForm = () => {
   const [SignupSuccessModal, setSignupSuccessModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const roles = useSelector((state) => state.roles.roles);
+  const roles = useSelector((state) => state.roles.roles);
 
   useEffect(() => {
-    // dispatch(fetchRoles()); // use API call
+    dispatch(fetchRoles()); // use API call
   }, [dispatch]);
 
   const handleSubmit = async (e) => {
@@ -146,8 +146,8 @@ const SignUpForm = () => {
                 isValid={formErrors.roleId === ''}
               >
                 <option value="">Select Role</option>
-                {rolesData.length > 0 ? (
-                  rolesData.map((role) => (
+                {roles.length > 0 ? (
+                  roles.map((role) => (
                     <option key={role.id} value={role.id}>
                       {role.name}
                     </option>

@@ -20,7 +20,6 @@ export const login = createAsyncThunk(
   }
 );
 // Async thunk for signup
-
 export const signup = createAsyncThunk(
   'auth/signup',
   async (userDetails, thunkAPI) => {
@@ -37,9 +36,6 @@ export const signup = createAsyncThunk(
     }
   }
 );
-
-
-
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
