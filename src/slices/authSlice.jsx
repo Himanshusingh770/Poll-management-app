@@ -25,18 +25,19 @@ export const signup = createAsyncThunk(
   'auth/signup',
   async (userDetails, thunkAPI) => {
     try {
-      console.log('Sending user details:', userDetails); // Log user details
+      console.log('Sending user details:', userDetails); 
       const response = await apiClient.post('/user/register', userDetails);
       return response.data;
     } catch (error) {
       if (error.response) {
-        console.error('Error response:', error.response); // Log the full error response
+        console.error('Error response:', error.response); 
         return thunkAPI.rejectWithValue(error.response.data.message || 'Signup failed');
       }
       return thunkAPI.rejectWithValue('Something went wrong. Please try again.');
     }
   }
 );
+
 
 const authSlice = createSlice({
   name: 'auth',

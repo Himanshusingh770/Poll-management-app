@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Container, Card } from 'react-bootstrap';
 import ToastMessage from '../Components/ToastMessage'; // Ensure the path is correct
@@ -7,8 +7,8 @@ import { signup } from '../slices/authSlice';
 import { fetchRoles } from '../slices/rolesSlice';
 import { validateField, validateForm } from '../utils/validationUtils';
 import '../App.css';
-import SuccessModal from '../Components/SuccessModel';
-import CustomButton from '../Components/ButtonModel/CustomButtonModel';
+import SuccessModal from '../Components/SuccessModal';
+import CustomButton from '../Components/ButtonModal/CustomButtonModel';
 import PasswordField from '../Components/PasswordField';
 import rolesData from '../Data/roles.json';
 
@@ -32,6 +32,7 @@ const SignUpForm = () => {
   const [SignupSuccessModal, setSignupSuccessModal] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // const roles = useSelector((state) => state.roles.roles);
 
   useEffect(() => {
     // dispatch(fetchRoles()); // use API call
@@ -160,6 +161,7 @@ const SignUpForm = () => {
                 {formErrors.roleId}
               </Form.Control.Feedback>
             </Form.Group>
+            
 
             {/* Password Field */}
             <PasswordField
