@@ -8,7 +8,6 @@ import { validateField, validateForm } from '../utils/validationUtils';
 import ToastMessage from '../Components/ToastMessage';
 import { Link } from 'react-router-dom';
 import CustomButton from '../Components/ButtonModal/CustomButtonModel';
-
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
