@@ -10,7 +10,6 @@ import SuccessModal from '../Components/SuccessModal';
 import CustomButton from '../Components/ButtonModal/CustomButtonModel';
 import PasswordField from '../Components/PasswordField';
 
-
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -34,7 +33,7 @@ const SignUpForm = () => {
   const roles = useSelector((state) => state.roles.roles);
 
   useEffect(() => {
-    dispatch(fetchRoles()); // use API call
+    dispatch(fetchRoles()); 
   }, [dispatch]);
 
   const handleSubmit = async (e) => {

@@ -1,0 +1,14 @@
+[
+    {
+      "name": "Add Poll",
+      "path": "/addpoll"
+    },
+    {
+      "name": "Create User",
+      "path": "/createuser"
+    },
+    {
+      "name": "Users",
+      "path": "/users"
+    }
+  ]
