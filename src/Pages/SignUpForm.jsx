@@ -82,7 +82,7 @@ const SignUpForm = () => {
     <div className="signup-main-container">
       <Container className="signup-container">
         <Card className="signup-card">
-          <h2 className="text-center mb-1">Sign Up</h2>
+          <h2 className="text-center mb-1 text-3xl">Sign Up</h2>
 
           <Form noValidate onSubmit={handleSubmit}>
             {/* First Name Field */}
@@ -194,7 +194,7 @@ const SignUpForm = () => {
 
           {/* Link to Login */}
           <div className="text-center mt-3 mb-4">
-            Already have an account? <Link to="/">Login</Link>
+            Already have an account? <Link to="/" className='text-blue-700'>Login</Link>
           </div>
         </Card>
 
