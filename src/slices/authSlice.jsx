@@ -1,34 +1,44 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../utils/apiClient';
-export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
-  try {
-    const response = await apiClient.post('/user/login', {
-      email: credentials.email,
-      password: credentials.password,
-    });
-    const { token, user } = response.data;  
-    localStorage.setItem('token', token); 
-    localStorage.setItem('user', JSON.stringify(user));
-    return user;  
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data.message || 'Login failed');
+export const login = createAsyncThunk(
+  'auth/login',
+  async (credentials, thunkAPI) => {
+    try {
+      const response = await apiClient.post('/user/login', {
+        email: credentials.email,
+        password: credentials.password
+      });
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data.message || 'Login failed'
+      );
+    }
   }
-});
+);
 // Async thunk for signup
-export const signup = createAsyncThunk('auth/signup', async (userDetails, thunkAPI) => {
-  try {
-    const response = await apiClient.post('/user/register', userDetails);
-    const { token, user } = response.data;
-    localStorage.setItem('token', token); 
-    localStorage.setItem('user', JSON.stringify(user)); 
-    return user;  
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.response?.data.message || 'Signup failed');
+export const signup = createAsyncThunk(
+  'auth/signup',
+  async (userDetails, thunkAPI) => {
+    try {
+      const response = await apiClient.post('/user/register', userDetails);
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      return user;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data.message || 'Signup failed'
+      );
+    }
   }
-});
+);
 // Thunk for logout
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
-  localStorage.removeItem('token'); 
+  localStorage.removeItem('token');
   localStorage.removeItem('user');
   return null;
 });
@@ -39,7 +49,7 @@ const authSlice = createSlice({
     user: JSON.parse(localStorage.getItem('user')) || null,
     isAuthenticated: !!localStorage.getItem('token'),
     isLoading: false,
-    error: null,
+    error: null
   },
   extraReducers: (builder) => {
     builder
@@ -80,7 +90,7 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
       });
-  },
+  }
 });
 
 export default authSlice.reducer;

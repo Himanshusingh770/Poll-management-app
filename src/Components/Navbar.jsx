@@ -74,16 +74,16 @@ const Navbar = () => {
           </div>
           {showLogoutBtn && (
             <div className="absolute right-0 mt-36 w-32  text-white rounded-md shadow-lg z-10">
-            <button
-              onClick={() => {
-                setShowLogoutBtn(false); // Hide logout after clicking
-                onLogoutClick();
-              }}
-              className="block w-full text-left px-4 py-2 text-xl bg-red-500 rounded-md "
-            >
-              Logout
-            </button>
-          </div>          
+              <button
+                onClick={() => {
+                  setShowLogoutBtn(false); // Hide logout after clicking
+                  onLogoutClick();
+                }}
+                className="block w-full text-left px-4 py-2 text-xl bg-red-500 rounded-md "
+              >
+                Logout
+              </button>
+            </div>
           )}
         </div>
       </div>
