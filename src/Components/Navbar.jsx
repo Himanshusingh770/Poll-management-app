@@ -30,7 +30,7 @@ const Navbar = () => {
           <ul
             className={`${
               showNavbarMenu ? 'block' : 'hidden'
-            } md:flex md:space-x-6 absolute md:static left-0 top-full w-full md:w-auto bg-blue-700 md:bg-transparent space-y-4 md:space-y-0 md:flex-row px-4 py-2 md:p-0`} // Positioning menu properly
+            } md:flex md:space-x-6 absolute md:static left-0 top-full w-full md:w-auto bg-blue-700 md:bg-transparent space-y-4 md:space-y-0 md:flex-row px-4 py-2 md:p-0`}
           >
             <li>
               <NavLink
@@ -76,7 +76,7 @@ const Navbar = () => {
             <div className="absolute right-0 mt-36 w-32  text-white rounded-md shadow-lg z-10">
               <button
                 onClick={() => {
-                  setShowLogoutBtn(false); // Hide logout after clicking
+                  setShowLogoutBtn(false);
                   onLogoutClick();
                 }}
                 className="block w-full text-left px-4 py-2 text-xl bg-red-500 rounded-md "
