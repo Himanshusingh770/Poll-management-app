@@ -19,7 +19,7 @@ const Navbar = () => {
     dispatch(logout());
     navigate('/');
   };
-  // Close dropdown when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -34,18 +34,48 @@ const Navbar = () => {
 
   return isAuthenticated && user ? (
     <nav className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white fixed w-full top-0 z-20">
-      <div className="flex justify-between items-center py-4 px-4">
-     {/* Left Section */}
-        <div className="flex items-center">
+      <div className="flex justify-between items-center py-2 px-3">
+        {/* Left Section */}
+        <div className="flex items-center justify-between py-4 px-4">
+          {/* Mobile Menu Icon */}
           <FaBars
             onClick={() => setShowNavbarMenu((prev) => !prev)}
             className="text-2xl md:hidden block cursor-pointer"
           />
+
+          {/* Dropdown Menu for Mobile */}
           <ul
             className={`${
-              showNavbarMenu ? 'block' : 'hidden'
-            } md:flex md:space-x-6 absolute md:static left-0 top-full w-full md:w-auto bg-blue-700 md:bg-transparent space-y-4 md:space-y-0 md:flex-row px-4 py-2 md:p-0`}
+              showNavbarMenu ? 'translate-x-0' : '-translate-x-full'
+            } fixed top-20 left-0 h-full bg-blue-700 space-y-4 px-4 py-2 w-[70vw] transition-transform duration-300 ease-in-out md:hidden`}
           >
+            <li>
+              <NavLink
+                to="/polls"
+                className={({ isActive }) =>
+                  isActive ? 'text-white' : 'text-gray-300'
+                }
+              >
+                Polls
+              </NavLink>
+            </li>
+            {user.roleId === ADMIN_ID &&
+              navbarData.map((item, index) => (
+                <li key={index}>
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) =>
+                      isActive ? 'text-white' : 'text-gray-300'
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
+                </li>
+              ))}
+          </ul>
+
+          {/* Horizontal Navbar for Desktop */}
+          <ul className="hidden md:flex md:space-x-6 md:bg-transparent">
             <li>
               <NavLink
                 to="/polls"
@@ -72,31 +102,40 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Right Section: User Dropdown with Logout Option */}
+        {/* Right Section: User Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <div
             onClick={() => setShowLogoutDropdown((prev) => !prev)}
-            className="flex items-center space-x-3 cursor-pointer"
+            className="flex items-center space-x-2 cursor-pointer"
           >
             <FaUserCircle className="text-3xl" />
-            <div>
-              <h1 className="text-sm md:text-base">
-                {user.firstName || 'No Name'}
-              </h1>
-              <p className="text-xs md:text-sm">{user.email || 'No Email'}</p>
-            </div>
           </div>
+
+          {/* Dropdown Menu */}
           {showLogoutDropdown && (
-            <div className="absolute right-0 mt-4 bg-white sm:w-52 w-40 rounded-lg shadow-lg text-gray-800 z-10">
-              <button
-                onClick={() => {
-                  setShowLogoutDropdown(false);
-                  onLogoutClick();
-                }}
-                className="w-full px-4 py-2 text-left text-xl text-red-600 hover:bg-red-100 rounded-lg"
-              >
-                Logout
-              </button>
+            <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg text-gray-800 z-10 w-40 sm:w-64  sm:p-4 p-2">
+              {/* User Info */}
+              <div className="sm:px-4 sm:py-3  border-b border-gray-200 bg-gradient-to-r from-gray-100 to-gray-200 rounded-t-lg">
+                <h1 className="font-semibold text-sm text-gray-700 truncate sm:p-1">
+                  {user.firstName || 'No Name'}
+                </h1>
+                <p className="text-xs text-gray-500 truncate">
+                  {user.email || 'No Email'}
+                </p>
+              </div>
+
+              {/* Logout Button */}
+              <div className="mt-3 flex justify-center">
+                <button
+                  onClick={() => {
+                    setShowLogoutDropdown(false);
+                    onLogoutClick();
+                  }}
+                  className="w-full sm:px-4 sm:py-2 px-2 py-1 text-lg text-white bg-gradient-to-r from-blue-800 to-blue-600 hover:from-blue-600 hover:to-blue-400 transition duration-300 ease-in-out rounded-lg shadow-md"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           )}
         </div>
