@@ -35,7 +35,7 @@ const Navbar = () => {
   return isAuthenticated && user ? (
     <nav className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white fixed w-full top-0 z-20">
       <div className="flex justify-between items-center py-4 px-4">
-        {/* Left Section: Hamburger and Links */}
+     {/* Left Section */}
         <div className="flex items-center">
           <FaBars
             onClick={() => setShowNavbarMenu((prev) => !prev)}
