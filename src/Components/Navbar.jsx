@@ -109,7 +109,6 @@ const Navbar = () => {
           >
             <FaUserCircle className="text-3xl" />
           </div>
-
           {/* Dropdown Menu */}
           {showLogoutDropdown && (
             <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg text-gray-800 z-10 w-40 sm:w-64  sm:p-4 p-2">
