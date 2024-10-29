@@ -9,9 +9,11 @@ import PublicRoute from './Routes/PublicRoute';
 import './App.css';
 
 const App = () => {
+
   return (
     <>
-      <Navbar />
+      {/* Show Navbar only when the user is authenticated */}
+      {<Navbar />}
       <Routes>
         <Route
           path="/"

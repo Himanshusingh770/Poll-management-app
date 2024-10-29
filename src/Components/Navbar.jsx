@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/authSlice';
 import navbarData from '../utils/navbarData.json';
-import { ADMIN_ID } from '../utils/constantData';
+import { ADMIN_ID ,HR_ID} from '../utils/constantData';
 
 const Navbar = () => {
   const [showLogoutDropdown, setShowLogoutDropdown] = useState(false);
@@ -33,21 +33,20 @@ const Navbar = () => {
   }, []);
 
   return isAuthenticated && user ? (
-    <nav className="bg-gradient-to-r from-indigo-600 to-purple-700 text-white fixed w-full top-0 z-20">
-      <div className="flex justify-between items-center py-2 px-3">
+    <nav className="bg-gradient-to-r from-sky-400 to-blue-400 text-white fixed w-full top-0 z-20 sm:px-4">
+      <div className="flex justify-between items-center xl:px-4 py-2 px-3">
         {/* Left Section */}
-        <div className="flex items-center justify-between py-4 px-4">
+        <div className="flex items-center justify-between py-4 px-1">
           {/* Mobile Menu Icon */}
           <FaBars
             onClick={() => setShowNavbarMenu((prev) => !prev)}
             className="text-2xl md:hidden block cursor-pointer"
           />
-
           {/* Dropdown Menu for Mobile */}
           <ul
             className={`${
               showNavbarMenu ? 'translate-x-0' : '-translate-x-full'
-            } fixed top-20 left-0 h-full bg-blue-700 space-y-4 px-4 py-2 w-[70vw] transition-transform duration-300 ease-in-out md:hidden`}
+            } fixed top-20 left-0 h-full bg-gradient-to-r from-sky-400 to-blue-400 space-y-4 px-4 py-2 w-[70vw] transition-transform duration-300 ease-in-out md:hidden`}
           >
             <li>
               <NavLink
@@ -59,7 +58,7 @@ const Navbar = () => {
                 Polls
               </NavLink>
             </li>
-            {user.roleId === ADMIN_ID &&
+            {(user.roleId === ADMIN_ID || user.roleId === HR_ID) &&
               navbarData.map((item, index) => (
                 <li key={index}>
                   <NavLink
@@ -86,7 +85,7 @@ const Navbar = () => {
                 Polls
               </NavLink>
             </li>
-            {user.roleId === ADMIN_ID &&
+            {(user.roleId === ADMIN_ID || user.roleId === HR_ID) &&
               navbarData.map((item, index) => (
                 <li key={index}>
                   <NavLink
@@ -133,7 +132,7 @@ const Navbar = () => {
                   }}
                   className="w-full sm:px-4 sm:py-2 px-2 py-1 text-lg text-white bg-gradient-to-r from-blue-800 to-blue-600 hover:from-blue-600 hover:to-blue-400 transition duration-300 ease-in-out rounded-lg shadow-md"
                 >
-                  Logout
+                  Log out
                 </button>
               </div>
             </div>
