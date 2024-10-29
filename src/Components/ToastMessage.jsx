@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';  
-import '../App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ToastMessage = ({
   show,
   onClose,
   message,
-  variant = 'danger', 
+  variant = 'danger',
   delay = 6000
 }) => {
   const title = variant === 'success' ? 'Success' : 'Error';
-  
+
   const toastOptions = {
-    position: "bottom-right",
+    position: 'bottom-right',
     autoClose: delay,
     hideProgressBar: false,
     closeOnClick: true,
@@ -21,7 +20,7 @@ const ToastMessage = ({
     draggable: true,
     progress: undefined,
     onClose: onClose,
-    theme: "colored",
+    theme: 'colored'
   };
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const ToastMessage = ({
         toast.error(`${title}: ${message}`, toastOptions);
       }
     }
-  }, [show, message, variant]); 
+  }, [show, message, variant]);
 
   return <ToastContainer />;
 };

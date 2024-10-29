@@ -1,10 +1,16 @@
 import React from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 
-const CustomButton = ({ isLoading, variant, children, className, ...props }) => {
+const CustomButton = ({
+  isLoading,
+  variant,
+  children,
+  className,
+  ...props
+}) => {
   return (
     <Button
-      className={`button-custom ${className}`} 
+      className={`button-custom ${className}`}
       variant={isLoading ? 'secondary' : variant}
       {...props}
       disabled={isLoading}

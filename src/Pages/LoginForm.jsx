@@ -53,8 +53,7 @@ const Login = () => {
     <div className="login-main-container">
       <Container className="login-container">
         <Card className="login-card">
-          <h2 className="text-center mb-4">Login</h2>
-
+          <h2 className="text-center mb-4 text-3xl">Login</h2>
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group controlId="formEmail" className="mb-3">
               <Form.Label>Email address</Form.Label>
