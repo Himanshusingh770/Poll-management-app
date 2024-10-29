@@ -32,19 +32,16 @@ const Navbar = () => {
     };
   }, []);
 
-  const accessibleLinks = user && user.roleId 
-    ? navbarData.filter((item) =>
-        Array.isArray(item.roles) &&
-        item.roles.includes(
-          user.roleId === ADMIN_ID ? 'ADMIN' : user.roleId === HR_ID ? 'HR' : 'USER'
-        )
-      )
-    : [];
-
-  if (!isAuthenticated || !user) {
-    return null;
-  }
-
+  const accessGroupMap = {
+    [ADMIN_ID]: "admin",
+    [HR_ID]: "admin",
+  };
+  
+  const userAccessGroup = accessGroupMap[user?.roleId] || "public";
+  const accessibleLinks = navbarData.filter((item) => 
+    item.accessGroup === userAccessGroup || item.accessGroup === "public"
+  );
+  if (!isAuthenticated || !user) return null;
   return (
     <nav className="bg-gradient-to-r from-sky-400 to-blue-400 text-white fixed w-full top-0 z-20 sm:px-4">
       <div className="flex justify-between items-center xl:px-4 sm:py-2 sm:px-3 px-2">
