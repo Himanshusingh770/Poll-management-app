@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FaUserCircle, FaBars } from 'react-icons/fa';
-import { NavLink, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../slices/authSlice';
 import navbarData from '../utils/navbarData.json';
 import { ADMIN_ID, HR_ID } from '../utils/constantData';
-
+import NavbarLinks from './NavbarLinks'; 
 const Navbar = () => {
   const [showLogoutDropdown, setShowLogoutDropdown] = useState(false);
   const [showNavbarMenu, setShowNavbarMenu] = useState(false);
@@ -36,53 +36,23 @@ const Navbar = () => {
     [ADMIN_ID]: "admin",
     [HR_ID]: "admin",
   };
-  
   const userAccessGroup = accessGroupMap[user?.roleId] || "public";
   const accessibleLinks = navbarData.filter((item) => 
     item.accessGroup === userAccessGroup || item.accessGroup === "public"
   );
+
   if (!isAuthenticated || !user) return null;
+
   return (
     <nav className="bg-gradient-to-r from-sky-400 to-blue-400 text-white fixed w-full top-0 z-20 sm:px-4">
-      <div className="flex justify-between items-center xl:px-4 sm:py-2 sm:px-3 px-2">
-        <div className="flex items-center justify-between sm:py-4 py-3 px-1">
-          <FaBars
-            onClick={() => setShowNavbarMenu((prev) => !prev)}
-            className="text-xl md:hidden block cursor-pointer"
-          />
+      <div className="flex items-center justify-between sm:py-4 py-3 px-3">
+        <FaBars
+          onClick={() => setShowNavbarMenu((prev) => !prev)}
+          className="text-xl md:hidden block cursor-pointer"
+        />
 
-          {/* Dropdown Menu for Mobile */}
-          <ul
-            className={`${
-              showNavbarMenu ? 'translate-x-0' : '-translate-x-full'
-            } fixed top-12 left-0 h-full bg-gradient-to-r from-sky-400 to-blue-400 space-y-4 px-4 py-2 w-[70vw] transition-transform duration-300 ease-in-out md:hidden`}
-          >
-            {accessibleLinks.map((item, index) => (
-              <li key={index}>
-                <NavLink
-                  to={item.path}
-                  className={({ isActive }) => (isActive ? 'text-white' : 'text-black')}
-                >
-                  {item.name}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-
-          {/* Horizontal Navbar for Desktop */}
-          <ul className="hidden md:flex md:space-x-6 md:bg-transparent">
-            {accessibleLinks.map((item, index) => (
-              <li key={index}>
-                <NavLink
-                  to={item.path}
-                  className={({ isActive }) => (isActive ? 'text-white' : 'text-black')}
-                >
-                  {item.name}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Use the NavbarLinks component here */}
+        <NavbarLinks accessibleLinks={accessibleLinks} showNavbarMenu={showNavbarMenu} />
 
         <div className="relative" ref={dropdownRef}>
           <div
