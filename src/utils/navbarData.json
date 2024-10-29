@@ -1,14 +1,23 @@
 [
     {
+      "name": "Polls",
+      "path": "/polls",
+      "roles": ["USER", "HR", "ADMIN"]
+    },
+    {
       "name": "Add Poll",
-      "path": "/addpoll"
+      "path": "/add-poll",
+      "roles": ["HR", "ADMIN"]
     },
     {
       "name": "Create User",
-      "path": "/createuser"
+      "path": "/create-user",
+      "roles": ["HR", "ADMIN"]
     },
     {
-      "name": "Users",
-      "path": "/users"
+      "name": "List Users",
+      "path": "/list-users",
+      "roles": ["HR", "ADMIN"]
     }
   ]
+  
