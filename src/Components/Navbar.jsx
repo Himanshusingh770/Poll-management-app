@@ -34,25 +34,25 @@ const Navbar = () => {
 
   return isAuthenticated && user ? (
     <nav className="bg-gradient-to-r from-sky-400 to-blue-400 text-white fixed w-full top-0 z-20 sm:px-4">
-      <div className="flex justify-between items-center xl:px-4 py-2 px-3">
+      <div className="flex justify-between items-center xl:px-4 sm:py-2 sm:px-3  px-2" >
         {/* Left Section */}
-        <div className="flex items-center justify-between py-4 px-1">
+        <div className="flex items-center justify-between sm:py-4 py-3 px-1">
           {/* Mobile Menu Icon */}
           <FaBars
             onClick={() => setShowNavbarMenu((prev) => !prev)}
-            className="text-2xl md:hidden block cursor-pointer"
+            className="text-xl md:hidden block cursor-pointer"
           />
           {/* Dropdown Menu for Mobile */}
           <ul
             className={`${
               showNavbarMenu ? 'translate-x-0' : '-translate-x-full'
-            } fixed top-20 left-0 h-full bg-gradient-to-r from-sky-400 to-blue-400 space-y-4 px-4 py-2 w-[70vw] transition-transform duration-300 ease-in-out md:hidden`}
+            } fixed top-12  left-0 h-full bg-gradient-to-r from-sky-400 to-blue-400 space-y-4 px-4 py-2 w-[70vw] transition-transform duration-300 ease-in-out md:hidden`}
           >
             <li>
               <NavLink
                 to="/polls"
                 className={({ isActive }) =>
-                  isActive ? 'text-white' : 'text-gray-300'
+                  isActive ? 'text-white' : 'text-black'
                 }
               >
                 Polls
@@ -64,7 +64,7 @@ const Navbar = () => {
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
-                      isActive ? 'text-white' : 'text-gray-300'
+                      isActive ? 'text-white' : 'text-black'
                     }
                   >
                     {item.name}
@@ -79,7 +79,7 @@ const Navbar = () => {
               <NavLink
                 to="/polls"
                 className={({ isActive }) =>
-                  isActive ? 'text-white' : 'text-gray-300'
+                  isActive ? 'text-white' : 'text-black'
                 }
               >
                 Polls
@@ -91,7 +91,7 @@ const Navbar = () => {
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
-                      isActive ? 'text-white' : 'text-gray-300'
+                      isActive ? 'text-white' : 'text-black'
                     }
                   >
                     {item.name}
@@ -113,8 +113,8 @@ const Navbar = () => {
           {showLogoutDropdown && (
             <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg text-gray-800 z-10 w-40 sm:w-64  sm:p-4 p-2">
               {/* User Info */}
-              <div className="sm:px-4 sm:py-3  border-b border-gray-200 bg-gradient-to-r from-gray-100 to-gray-200 rounded-t-lg">
-                <h1 className="font-semibold text-sm text-gray-700 truncate sm:p-1">
+              <div className="sm:px-4 sm:py-3 px-1  border-b border-gray-200 bg-gradient-to-r from-gray-100 to-gray-200 rounded-t-lg">
+                <h1 className="font-semibold text-sm text-gray-700 truncate  p-1">
                   {user.firstName || 'No Name'}
                 </h1>
                 <p className="text-xs text-gray-500 truncate">
@@ -123,13 +123,13 @@ const Navbar = () => {
               </div>
 
               {/* Logout Button */}
-              <div className="mt-3 flex justify-center">
+              <div className="sm:mt-3 mt-2 flex justify-center">
                 <button
                   onClick={() => {
                     setShowLogoutDropdown(false);
                     onLogoutClick();
                   }}
-                  className="w-full sm:px-4 sm:py-2 px-2 py-1 text-lg text-white bg-gradient-to-r from-blue-800 to-blue-600 hover:from-blue-600 hover:to-blue-400 transition duration-300 ease-in-out rounded-lg shadow-md"
+                  className="w-full sm:px-4 sm:py-2 px-1 py-[6px] sm:text-lg text-sm text-white bg-gradient-to-r from-blue-800 to-blue-600 hover:from-blue-600 hover:to-blue-400 transition duration-300 ease-in-out rounded-lg shadow-md"
                 >
                   Log out
                 </button>
