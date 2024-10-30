@@ -20,6 +20,21 @@ export const login = createAsyncThunk(
     }
   }
 );
+// Async thunk for getting user data
+export const getUser = createAsyncThunk(
+  'auth/getUser',
+  async (_, thunkAPI) => {
+    try {
+      const response = await apiClient.get('/user/profile'); 
+      return response.data.user; 
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data.message || 'Failed to fetch user data'
+      );
+    }
+  }
+);
+
 
 // Async thunk for signup
 export const signup = createAsyncThunk(
@@ -83,12 +98,25 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-
+      // get User
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload; // Capture error message
+      })
       // Handle logout
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
       });
+
   },
 });
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch,useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Container, Card } from 'react-bootstrap';
-import ToastMessage from '../Components/ToastMessage'; // Ensure the path is correct
+import ToastMessage from '../Components/ToastMessage'; 
 import { signup } from '../slices/authSlice';
 import { fetchRoles } from '../slices/rolesSlice';
 import { validateField, validateForm } from '../utils/validationUtils';
@@ -19,7 +19,6 @@ const SignUpForm = () => {
     password: '',
     confirmPassword: ''
   });
-
   const [formErrors, setFormErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState({
