@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Chart as ChartJS } from "chart.js/auto";
+
 import { Bar } from "react-chartjs-2";
 
 const ChartModel = ({ data, setShowPollChart }) => {
@@ -9,7 +9,7 @@ const ChartModel = ({ data, setShowPollChart }) => {
       {
         label: "",
         data: [],
-        backgroundColor: "rgb(0, 137, 167)",
+        backgroundColor: "rgb(0, 130, 160)",
         borderWidth: 1,
       },
     ],
@@ -26,7 +26,7 @@ const ChartModel = ({ data, setShowPollChart }) => {
         {
           label: pollData.title,
           data: optionList.map((items) => items.voteCount.length),
-          backgroundColor: "rgb(0, 137, 167)",
+          backgroundColor: "rgb(0, 130, 160)",
         },
       ],
     });

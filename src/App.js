@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Login from './Pages/LoginForm';
 import SignUpForm from './Pages/SignUpForm';
-import PollList from './Pages/PollList';
+import PollsPage from './Pages/PollsPage';
 import Navbar from './Components/Navbar';
 import ProtectedRoute from './Routes/ProtectedRoutes';
 import PublicRoute from './Routes/PublicRoute';
@@ -25,7 +25,7 @@ const App = () => {
         />
         <Route
           path="/polls"
-          element={<ProtectedRoute element={<PollList />} />}
+          element={<ProtectedRoute element={<PollsPage/>} />}
         />
       </Routes>
     </>
