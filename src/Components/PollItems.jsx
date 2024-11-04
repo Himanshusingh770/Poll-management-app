@@ -12,7 +12,7 @@ const AdminActions = ({ poll, showPollChartModal, showDeleteModal }) => (
     <Link to={`/editpoll/${poll.id}`} state={poll}>
       <FaEdit className="text-blue-500 cursor-pointer" />
     </Link>
-    <IoBarChart onClick={() => showPollChartModal(poll)} className="text-pink-400 cursor-pointer" />
+    <IoBarChart onClick={() => showPollChartModal(poll)} className="text-green-400 cursor-pointer" />
   </div>
 );
 
