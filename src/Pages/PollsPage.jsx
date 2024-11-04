@@ -13,34 +13,24 @@ const PollsPage = () => {
   const [selectedPoll, setSelectedPoll] = useState(null);
 
   const dispatch = useDispatch();
-  const { pollList = [], loading = false, pollListLength = 0 } = useSelector(
-    (state) => state.polls || {}
-  );
+  const { pollList = [], loading = false, pollListLength = 0 } = useSelector((state) => state.polls || {});
 
   useEffect(() => {
     dispatch(getPollList(pageNumber));
-  }, [dispatch, pageNumber]);
+  }, [pageNumber]);
 
   useEffect(() => {
     if (pollList.length > 0) {
-      if (pageNumber === 1) {
-        setPolls(pollList);
-      } else {
-        setPolls((prevPolls) => [...prevPolls, ...pollList]);
-      }
+      setPolls((prevPolls) => (pageNumber === 1 ? pollList : [...prevPolls, ...pollList]));
     }
   }, [pollList, pageNumber]);
-  
 
   const increaseVoteCount = (pollId, optionId) => {
     const updatedPolls = polls?.map((poll) => {
       if (poll.id === pollId) {
         const updatedOptions = poll.optionList?.map((option) => {
           if (option.id === optionId) {
-            return {
-              ...option,
-              voteCount: [...option.voteCount, { optionId }],
-            };
+            return { ...option, voteCount: [...option.voteCount, { optionId }] };
           }
           return option;
         });
@@ -71,14 +61,14 @@ const PollsPage = () => {
 
   return pollList.length === 0 ? (
     <div className="text-center mx-auto w-full mt-24">
-      <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-secondary motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+      <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent text-secondary"></div>
     </div>
   ) : (
     <div className="mt-24">
-      <div className="flex flex-wrap justify-center sm:justify-between 2xl:justify-normal gap-4 mx-auto w-[95%]">
-        {polls.map((poll, index) => (
+      <div className="flex flex-wrap justify-center gap-3 mx-auto w-full lg:px-10">
+        {polls.map((poll) => (
           <PollItem
-            key={index}
+            key={poll.id}
             poll={poll}
             showPollChartModal={showPollChartModal}
             showDeleteModal={showDeleteModal}
@@ -86,20 +76,18 @@ const PollsPage = () => {
           />
         ))}
       </div>
-      <div className="text-center">
+      <div className="text-center mt-6">
         {!loading ? (
           <button
             onClick={() => setPageNumber((prevPage) => prevPage + 1)}
-            className={`mx-auto w-[120px] py-2 mt-10 px-4 ${
-              pollListLength !== 10 ? "bg-gray-400" : "bg-blue-400"
-            } rounded-md mb-10`}
+            className={`mx-auto sm:w-[180px] w-[140px]  py-2 mt-8 px-6 ${pollListLength !== 10 ? "bg-gray-400" : "bg-blue-400"} rounded-md mb-10`}
             disabled={pollListLength !== 10}
           >
             Load More
           </button>
         ) : (
           <div className="text-center mx-auto w-full mt-10">
-            <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-secondary motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+            <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent text-secondary"></div>
           </div>
         )}
       </div>
@@ -122,4 +110,4 @@ const PollsPage = () => {
   );
 };
 
-export default PollsPage;  
+export default PollsPage;

@@ -12,9 +12,11 @@ const ConfirmationDeleteModal = ({
 }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center z-10">
+      {/* Modal overlay for background dimming */}
       <div className="modal-overlay fixed inset-0 bg-gray-500 opacity-50"></div>
       <div className="modal-container bg-white md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto flex flex-col items-center">
         <div className="modal-content py-6 text-left px-10">
+          {/* Modal header */}
           <div className="flex justify-between items-center pb-3 mb-2">
             <p className="text-2xl font-bold">{modalTitle}</p>
             {btnCancelText && (
@@ -25,6 +27,7 @@ const ConfirmationDeleteModal = ({
               />
             )}
           </div>
+          {/* Modal subtitle */}
           <p className="mb-3">{modalSubTitle}</p>
 
           <div

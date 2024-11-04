@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
-
+import { Chart as ChartJS } from "chart.js/auto";
 import { Bar } from "react-chartjs-2";
 
 const ChartModel = ({ data, setShowPollChart }) => {
   const [chartData, setChartData] = useState({
     labels: [],
-    datasets: [
-      {
-        label: "",
-        data: [],
-        backgroundColor: "rgb(0, 130, 160)",
-        borderWidth: 1,
-      },
-    ],
+    datasets: [],
   });
 
   const viewPollVoteChart = (pollData) => {
@@ -34,7 +27,8 @@ const ChartModel = ({ data, setShowPollChart }) => {
 
   useEffect(() => {
     viewPollVoteChart(data);
-  }, []);
+  }, [data]);
+
   return (
     <div className="fixed inset-0 flex justify-center items-center z-10">
       <div
