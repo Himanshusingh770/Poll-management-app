@@ -21,7 +21,14 @@ const PollsPage = () => {
 
   useEffect(() => {
     if (pollList.length > 0) {
-      setPolls((prevPolls) => (pageNumber === 1 ? pollList : [...prevPolls, ...pollList]));
+      setPolls((prevPolls) => {
+        if (pageNumber === 1) {
+          return pollList;
+        } else {
+          const newPolls = pollList.filter((newPoll) => !prevPolls.some((prevPoll) => prevPoll.id === newPoll.id));
+          return [...prevPolls, ...newPolls];
+        }
+      });
     }
   }, [pollList, pageNumber]);
 
@@ -61,12 +68,12 @@ const PollsPage = () => {
 
   return (
     <div className="mt-24">
-      {pollList.length === 0 && !loading ? (
+      {polls.length === 0 && !loading ? (
         <div className="text-center mx-auto w-full mt-24">
           <p>No polls available.</p>
         </div>
       ) : (
-        <div className="flex flex-wrap justify-center gap-3 mx-auto w-full lg:px-10">
+        <div className="flex flex-wrap  gap-3 mx-auto w-full lg:px-10">
           {polls.map((poll) => (
             <PollItem
               key={poll.id}
