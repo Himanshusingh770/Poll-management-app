@@ -17,7 +17,7 @@ const PollsPage = () => {
 
   useEffect(() => {
     dispatch(getPollList(pageNumber));
-  }, [pageNumber]);
+  }, [dispatch, pageNumber]);
 
   useEffect(() => {
     if (pollList.length > 0) {
@@ -59,29 +59,31 @@ const PollsPage = () => {
     setPolls(polls.filter((poll) => poll.id !== selectedPoll.id));
   };
 
-  return pollList.length === 0 ? (
-    <div className="text-center mx-auto w-full mt-24">
-      <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent text-secondary"></div>
-    </div>
-  ) : (
+  return (
     <div className="mt-24">
-      <div className="flex flex-wrap justify-center gap-3 mx-auto w-full lg:px-10">
-        {polls.map((poll) => (
-          <PollItem
-            key={poll.id}
-            poll={poll}
-            showPollChartModal={showPollChartModal}
-            showDeleteModal={showDeleteModal}
-            increaseVoteCount={increaseVoteCount}
-          />
-        ))}
-      </div>
+      {pollList.length === 0 && !loading ? (
+        <div className="text-center mx-auto w-full mt-24">
+          <p>No polls available.</p>
+        </div>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-3 mx-auto w-full lg:px-10">
+          {polls.map((poll) => (
+            <PollItem
+              key={poll.id}
+              poll={poll}
+              showPollChartModal={showPollChartModal}
+              showDeleteModal={showDeleteModal}
+              increaseVoteCount={increaseVoteCount}
+            />
+          ))}
+        </div>
+      )}
       <div className="text-center mt-6">
         {!loading ? (
           <button
             onClick={() => setPageNumber((prevPage) => prevPage + 1)}
-            className={`mx-auto sm:w-[180px] w-[140px]  py-2 mt-8 px-6 ${pollListLength !== 10 ? "bg-gray-400" : "bg-blue-400"} rounded-md mb-10`}
-            disabled={pollListLength !== 10}
+            className={`mx-auto sm:w-[180px] w-[140px] py-2 mt-8 px-6 ${pollListLength < 10 ? "bg-gray-400" : "bg-blue-400"} rounded-md mb-10`}
+            disabled={pollListLength < 10}
           >
             Load More
           </button>
