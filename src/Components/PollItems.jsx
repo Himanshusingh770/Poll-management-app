@@ -15,7 +15,6 @@ const AdminActions = ({ poll, showPollChartModal, showDeleteModal }) => (
     <IoBarChart onClick={() => showPollChartModal(poll)} className="text-green-400 cursor-pointer" />
   </div>
 );
-
 // Poll options component
 const PollOptions = ({ poll, selectedOption, setSelectedOption, voted }) => (
   <>

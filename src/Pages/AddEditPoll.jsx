@@ -33,7 +33,7 @@ const AddEditPoll = () => {
   const [showDeletedModal, setShowDeletedModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [editOption, setEditOption] = useState(null);
-  const { loading = false } = useSelector((state) => state.poll || {});
+  const { loading  } = useSelector((state) => state.poll || {});
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -146,6 +146,7 @@ const AddEditPoll = () => {
         result = await dispatch(addPoll(newPoll));
         handleShowModal(result);
       }
+      setShowModal(true);
     } else {
       setErrors(newErrors);
     }
