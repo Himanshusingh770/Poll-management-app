@@ -61,45 +61,7 @@ const AddEditPoll = () => {
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
-  const handleAddOption = async () => {
-    const { newErrors, isVallid } = validateAddEditForm({
-      optionTitle: newPollData.optionTitle,
-    });
-    if (isVallid) {
-      setOptions([...options, { optionTitle: newPollData.optionTitle }]);
-      if (editOption) {
-        const newOptions = [...options];
-        newOptions[editOption.index].optionTitle = newPollData.optionTitle;
-        setOptions(newOptions);
-      }
 
-      if (id && editOption?.id) {
-        dispatch(
-          updateOption({
-            id: editOption.id,
-            editedOption: newPollData.optionTitle,
-          })
-        );
-      }
-
-      if (id && !editOption?.id) {
-        const result = await dispatch(
-          addOption({
-            id,
-            optionTitle: newPollData.optionTitle,
-          })
-        );
-        if (result?.payload?.status === 200) {
-          const newOptions = [...options, result?.payload?.data.option];
-          setOptions(newOptions);
-        }
-      }
-      setEditOption(null);
-      setNewPollData({ ...newPollData, optionTitle: "" });
-    } else {
-      setErrors(newErrors);
-    }
-  };
 
   const handleDeleteOption = () => {
     console.log(id);
