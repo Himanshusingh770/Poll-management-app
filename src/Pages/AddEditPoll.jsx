@@ -235,9 +235,9 @@ const AddEditPoll = () => {
       {showModal && (
        <SuccessModal
        show={showModal}
-       modalTitle="Successfully"
+       message="Successfully"
        btnCancelText="Cancel"
-       modalSubTitle={`Poll ${id ? "updated" : "created"} successfully. Click OK to redirect to the poll page.`}
+       subtext={`Poll ${id ? "updated" : "created"} successfully. Click OK to redirect to the poll page.`}
        okButton="Ok"
        onOkClick={() => {
          navigate("/");

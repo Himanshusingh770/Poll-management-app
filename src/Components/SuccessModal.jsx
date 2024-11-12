@@ -8,14 +8,13 @@ const SuccessModal = ({
   okButton,
   onOkClick,
   modalTitle,     
-  btnCancelText,   
-  modalSubTitle     
+  btnCancelText,      
 }) => {
   return (
     <Modal show={show} centered size="sm" onHide={onOkClick}>
       <Modal.Body className="text-center">
-        <p className="text-success fs-4">{modalTitle || message}</p>  
-        <p>{modalSubTitle || subtext}</p>                            
+        <p className="text-success fs-4">{ message}</p>  
+        <p>{ subtext}</p>                            
       </Modal.Body>
       <Modal.Footer className="justify-content-center">
         <Button
