@@ -29,13 +29,13 @@ const App = () => {
         />
         <Route
           path="/addPoll"
-          element={<ProtectedRoute Component={AddEditPoll} redirectTo="/" />}
+          element={<ProtectedRoute element={<AddEditPoll />} redirectTo="/" adminOnly />}
         />
         <Route
           path="/editPoll/:id"
-          element={<ProtectedRoute Component={AddEditPoll} redirectTo="/" />}
+          element={<ProtectedRoute element={<AddEditPoll />} redirectTo="/" adminOnly />}
         />
-         <Route path="/*" element={<NotFound />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </>
   );
