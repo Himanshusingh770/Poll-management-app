@@ -6,8 +6,7 @@ const SuccessModal = ({
   message,
   subtext,
   okButton,
-  onOkClick,
-  modalTitle,     
+  onOkClick,     
   btnCancelText,      
 }) => {
   return (
