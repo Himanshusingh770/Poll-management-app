@@ -9,7 +9,13 @@ const SuccessModal = ({
   onOkClick,     
 }) => {
   return (
-    <Modal show={show} centered size="sm" onHide={onOkClick}>
+    <Modal
+      show={show}
+      centered
+      size="sm"
+      onHide={onOkClick}
+      backdrop="static"
+    >
       <Modal.Body className="text-center">
         <p className="text-success fs-4">{ message}</p>  
         <p>{ subtext}</p>                            
