@@ -212,29 +212,30 @@ const AddEditPoll = () => {
           <ErrorComponent errorMessage={errors.optionTitle} />
         </div>
         <div className="flex flex-col gap-2 mb-2">
-          {options.map((item, index) => (
-            <div
-              className="flex bg-white items-center max-w-full border rounded-lg p-2"
-              key={index}
-            >
-              <span className="flex-grow">{item.optionTitle}</span>
-              <div className="ml-auto flex gap-2">
-                <button className="" onClick={() => handleUpdateOption(index)}>
-                  <MdModeEditOutline />
-                </button>
-                <button
-                  className=""
-                  onClick={() => {
-                    setSelectedIndex(index);
-                    setShowDeletedModal(true);
-                  }}
-                >
-                  <MdDelete />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+  {options.map((item, index) => (
+    <div
+      className="flex bg-white items-center max-w-full border rounded-lg p-2"
+      key={index}
+    >
+      <span className="flex-grow">{item.optionTitle}</span>
+      <div className="ml-auto flex gap-2">
+        <button className="" onClick={() => handleUpdateOption(index)}>
+          <MdModeEditOutline />
+        </button>
+        <button
+          className=""
+          onClick={() => {
+            setSelectedIndex(index);
+            setShowDeletedModal(true);
+          }}
+        >
+          <MdDelete />
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
         <div className="w-full text-center mt-6">
           <button
             type="button"
@@ -265,13 +266,14 @@ const AddEditPoll = () => {
         />
       )}
       {showDeletedModal && (
-        <ConfirmationDeleteModal
-          OkText={'Delete'}
-          btnCancelText={'Cancel'}
-          deleteMessage={'Are you sure you want to delete this option?'}
-          onCancelClick={() => setShowDeletedModal(false)}
-          onConfirmClick={handleDeleteOption}
-        />
+         <ConfirmationDeleteModal
+         modalTitle="Delete Option"
+         modalSubTitle="Are you sure you want to delete this option?"
+         btnDeleteText="Delete"
+         btnCancelText="Cancel"
+         onBtnCancelClick={() => setShowDeletedModal(false)}
+         onBtnOkClick={handleDeleteOption}
+       />
       )}
        <ToastMessage
         show={showErrorToast}
