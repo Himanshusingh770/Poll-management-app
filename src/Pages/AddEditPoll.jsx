@@ -16,8 +16,6 @@ import { IoIosAddCircle } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
 import { MdModeEditOutline } from 'react-icons/md';
 import ToastMessage from '../Components/ToastMessage';
-
-
 const AddEditPoll = () => {
   const { id } = useParams();
   const { state } = useLocation();
@@ -34,7 +32,7 @@ const AddEditPoll = () => {
   const { loading } = useSelector((state) => state.poll || {});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [submitting, setSubmitting] = useState(false); 
+  const [submitting, setSubmitting] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -53,7 +51,10 @@ const AddEditPoll = () => {
           setNewPollData({ title: poll.title, optionTitle: '' });
           setOptions(poll.optionList || []);
         } else {
-          console.error('Failed to fetch valid poll details. Response:', result?.payload);
+          console.error(
+            'Failed to fetch valid poll details. Response:',
+            result?.payload
+          );
         }
       } else {
         console.error('No state or ID provided for poll details');
@@ -62,7 +63,6 @@ const AddEditPoll = () => {
       console.error('Error fetching poll details:', error);
     }
   };
-  
   useEffect(() => {
     if (id) {
       getSinglePollDetails();
@@ -111,7 +111,6 @@ const AddEditPoll = () => {
       setErrors(newErrors);
     }
   };
-
   const handleDeleteOption = () => {
     if (id) {
       const deleteOptionId = options[selectedIndex].id;
@@ -132,15 +131,14 @@ const AddEditPoll = () => {
 
   // const handleShowModal = (data) => {
   //   if (data?.payload?.status === 200) {
-  //     setShowModal(true); 
+  //     setShowModal(true);
   //   } else {
   //     setToastMessage(data?.payload?.message || 'An error occurred');
-  //     setShowErrorToast(true); 
+  //     setShowErrorToast(true);
   //   }
   // };
-  
   const onFormSubmit = async () => {
-    setSubmitting(true); 
+    setSubmitting(true);
     const newPoll = {
       title: newPollData.title,
       options
@@ -168,7 +166,7 @@ const AddEditPoll = () => {
     } else {
       setErrors(newErrors);
     }
-    setSubmitting(false); 
+    setSubmitting(false);
   };
 
   return (
@@ -212,36 +210,35 @@ const AddEditPoll = () => {
           <ErrorComponent errorMessage={errors.optionTitle} />
         </div>
         <div className="flex flex-col gap-2 mb-2">
-  {options.map((item, index) => (
-    <div
-      className="flex bg-white items-center max-w-full border rounded-lg p-2"
-      key={index}
-    >
-      <span className="flex-grow">{item.optionTitle}</span>
-      <div className="ml-auto flex gap-2">
-        <button className="" onClick={() => handleUpdateOption(index)}>
-          <MdModeEditOutline />
-        </button>
-        <button
-          className=""
-          onClick={() => {
-            setSelectedIndex(index);
-            setShowDeletedModal(true);
-          }}
-        >
-          <MdDelete />
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
-
+          {options.map((item, index) => (
+            <div
+              className="flex bg-white items-center max-w-full border rounded-lg p-2"
+              key={index}
+            >
+              <span className="flex-grow">{item.optionTitle}</span>
+              <div className="ml-auto flex gap-2">
+                <button className="" onClick={() => handleUpdateOption(index)}>
+                  <MdModeEditOutline />
+                </button>
+                <button
+                  className=""
+                  onClick={() => {
+                    setSelectedIndex(index);
+                    setShowDeletedModal(true);
+                  }}
+                >
+                  <MdDelete />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="w-full text-center mt-6">
           <button
             type="button"
             className="w-[50%] bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
             onClick={() => onFormSubmit()}
-            disabled={loading || submitting} 
+            disabled={loading || submitting}
           >
             {submitting ? (
               <div className="inline-block h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-secondary motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
@@ -266,16 +263,16 @@ const AddEditPoll = () => {
         />
       )}
       {showDeletedModal && (
-         <ConfirmationDeleteModal
-         modalTitle="Delete Option"
-         modalSubTitle="Are you sure you want to delete this option?"
-         btnDeleteText="Delete"
-         btnCancelText="Cancel"
-         onBtnCancelClick={() => setShowDeletedModal(false)}
-         onBtnOkClick={handleDeleteOption}
-       />
+        <ConfirmationDeleteModal
+          modalTitle="Delete Option"
+          modalSubTitle="Are you sure you want to delete this option?"
+          btnDeleteText="Delete"
+          btnCancelText="Cancel"
+          onBtnCancelClick={() => setShowDeletedModal(false)}
+          onBtnOkClick={handleDeleteOption}
+        />
       )}
-       <ToastMessage
+      <ToastMessage
         show={showErrorToast}
         onClose={() => setShowErrorToast(false)}
         message={toastMessage}
