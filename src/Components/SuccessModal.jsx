@@ -7,7 +7,6 @@ const SuccessModal = ({
   subtext,
   okButton,
   onOkClick,     
-  btnCancelText,      
 }) => {
   return (
     <Modal show={show} centered size="sm" onHide={onOkClick}>
@@ -23,15 +22,6 @@ const SuccessModal = ({
         >
           {okButton}
         </Button>
-        {btnCancelText && (                  
-          <Button
-            variant="secondary"
-            className="rounded-pill w-[70%]  "
-            onClick={onOkClick}
-          >
-            {btnCancelText}
-          </Button>
-        )}
       </Modal.Footer>
     </Modal>
   );

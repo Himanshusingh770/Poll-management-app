@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import apiClient from "../utils/apiClient"; // Using apiClient for API requests
+import apiClient from "../utils/apiClient"; 
 
 // Async thunk to add an option to a poll
 export const addOption = createAsyncThunk(
