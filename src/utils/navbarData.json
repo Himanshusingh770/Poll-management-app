@@ -11,12 +11,12 @@
   },
   {
     "name": "Create User",
-    "path": "/create-user",
+    "path": "/createuser",
     "accessGroup": "admin"
   },
   {
     "name": "List Users",
-    "path": "/list-users",
+    "path": "/users",
     "accessGroup": "admin"
   }
 ]
