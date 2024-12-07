@@ -8,6 +8,7 @@ import ProtectedRoute from './Routes/ProtectedRoutes';
 import AddEditPoll from './Pages/AddEditPoll';
 import PublicRoute from './Routes/PublicRoute';
 import NotFound from './Pages/NotFound';
+import UserList from './Pages/UserList';
 import './App.css';
 
 const App = () => {
@@ -35,6 +36,16 @@ const App = () => {
           path="/editPoll/:id"
           element={<ProtectedRoute element={<AddEditPoll />} redirectTo="/" adminOnly />}
         />
+           <Route
+          path="/createUser"
+          element={<ProtectedRoute Component={SignUpForm} redirectTo="/createUser" />}
+        />
+         <Route
+          path="/users"
+          element={<ProtectedRoute Component={UserList} redirectTo="/users" />}
+        />
+
+        <Route/>
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </>

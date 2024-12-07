@@ -34,7 +34,22 @@ export const getUser = createAsyncThunk(
     }
   }
 );
+export const createUser = createAsyncThunk(
+  "auth/createUser",
+  async (userData , thunkAPI) =>{
+    console.log(userData);
+    try{
+      const response = await apiClient.post("user/create");
+      return response.data.userData;
+    }
+    catch(error){
+      return thunkAPI.rejectWithValue(
+        error.response?.data.message || "Faild to featch user data"
+      );
+    }
+  }
 
+)
 
 // Async thunk for signup
 export const signup = createAsyncThunk(
@@ -114,7 +129,19 @@ const authSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
         state.isAuthenticated = false;
-      });
+      })
+      .addCase(createUser.pending , (state) =>{
+       state.isLoading = true;
+       state.error = null;
+      })
+      .addCase(createUser.fulfilled, (state , action)=>{
+        state.isLoading = false;
+        state.createUser = action.payload;
+      })
+      .addCase(createUser.rejected,(state,action)=>{
+        state.isLoading = false;
+        state.error = action.payload;
+      })
 
   },
 });

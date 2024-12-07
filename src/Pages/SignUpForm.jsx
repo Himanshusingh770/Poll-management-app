@@ -79,7 +79,7 @@ const SignUpForm = () => {
 
   return (
     <div className="signup-main-container">
-      <Container className="signup-container">
+      <Container className="signup-container pt-20">
         <Card className="signup-card">
           <h2 className="text-center mb-1 text-3xl">Sign Up</h2>
 
