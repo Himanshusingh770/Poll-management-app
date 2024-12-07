@@ -73,17 +73,19 @@ const PollsPage = () => {
           <p>No polls available.</p>
         </div>
       ) : (
-        <div className="flex flex-wrap  gap-3 mx-auto w-full lg:px-10">
-          {polls.map((poll) => (
-            <PollItem
-              key={poll.id}
-              poll={poll}
-              showPollChartModal={showPollChartModal}
-              showDeleteModal={showDeleteModal}
-              increaseVoteCount={increaseVoteCount}
-            />
-          ))}
-        </div>
+        <div className="flex flex-wrap gap-3 w-full sm:px-10 justify-center sm:justify-start">
+        {polls.map((poll) => (
+          <PollItem
+            key={poll.id}
+            poll={poll}
+            showPollChartModal={showPollChartModal}
+            showDeleteModal={showDeleteModal}
+            increaseVoteCount={increaseVoteCount}
+          />
+        ))}
+      </div>
+      
+
       )}
       <div className="text-center mt-6">
         {!loading ? (

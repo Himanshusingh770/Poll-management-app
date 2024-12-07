@@ -6,14 +6,16 @@ const CustomButton = ({
   variant,
   children,
   className,
+  type='button',
   ...props
 }) => {
   return (
     <Button
       className={`button-custom ${className}`}
       variant={isLoading ? 'secondary' : variant}
-      {...props}
+      type={type}
       disabled={isLoading}
+      {...props}
     >
       {isLoading ? <Spinner animation="border" size="sm" /> : children}
     </Button>

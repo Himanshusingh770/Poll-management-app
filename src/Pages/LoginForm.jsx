@@ -20,7 +20,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     const { errors, isFormValid } = validateForm(formData, false);
     setFormErrors(errors);
     if (!isFormValid) {
@@ -36,7 +36,6 @@ const Login = () => {
       .then(() => navigate('/polls'))
       .catch(() => setShowErrorToast(true));
   };
-
   const handleValueChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -103,7 +102,7 @@ const Login = () => {
                 type="submit"
                 isLoading={isLoading}
                 variant="primary"
-                className="login-button" // Use the login button class
+                className="login-button"
               >
                 Login
               </CustomButton>

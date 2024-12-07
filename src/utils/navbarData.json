@@ -6,7 +6,7 @@
   },
   {
     "name": "Add Poll",
-    "path": "/add-poll",
+    "path": "/addpoll",
     "accessGroup": "admin"
   },
   {
